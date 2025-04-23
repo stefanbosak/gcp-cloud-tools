@@ -151,7 +151,8 @@ jobs:
             WORKSPACE_ROOT_DIR=${{ env.WORKSPACE_ROOT_DIR }}
           load: false
           no-cache: false
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+#,linux/arm64
       - name: 'Load Docker image (amd64)'
         if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
         uses: docker/build-push-action@master
@@ -207,7 +208,8 @@ jobs:
           tags: |
             ${{ secrets.DH_USER }}/${{ env.REPOSITORY_NAME }}:${{ env.CONTAINER_TAG }}
             ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.CONTAINER_TAG }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+#,linux/arm64
       - name: 'Push git changes'
         if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
         uses: ad-m/github-push-action@master

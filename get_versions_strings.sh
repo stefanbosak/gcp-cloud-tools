@@ -58,3 +58,7 @@ for key in ${keys}; do
 
   echo ";"
 done
+
+echo "GCLOUD_CLI_VERSION:"
+curl -s "https://hub.docker.com/v2/repositories/google/cloud-sdk/tags?page=1&page_size=100" | jq -r '.results[].name | select(test("^\\d{3}\\.\\d+\\.\\d+$"))' | head -n ${CLI_VERSIONS_AMOUNT}
+echo ";"

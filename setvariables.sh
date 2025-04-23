@@ -49,7 +49,7 @@ export CONTAINER_IMAGE=${CONTAINER_IMAGE:-"${CONTAINER_REPOSITORY}${CONTAINER_NA
 export ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION:-2.19.0b1}
 
 # gcloud CLI tool version
-export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-"$(curl -s https://dl.google.com/dl/cloudsdk/channels/rapid/components-2.json | jq -r '.version')"}
+export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-519.0.0}
 
 # Helm version
 export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.17.3}

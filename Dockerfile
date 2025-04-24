@@ -265,7 +265,10 @@ COPY --from=gcp-cloud-tools-terraform-builder "/usr/local/bin/" "/usr/local/bin/
 COPY --from=gcp-cloud-tools-terragrunt-builder "/usr/local/bin/" "/usr/local/bin/"
 
 # install gcloud CLI tooling
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-cli=${GCLOUD_CLI_VERSION}-0 -y
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+    tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+    gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && \
+    apt-get install google-cloud-cli=${GCLOUD_CLI_VERSION}-0 google-cloud-cli-gke-gcloud-auth-plugin=${GCLOUD_CLI_VERSION}-0 -y
 
 # enable tools completions (required to run given tool to generate completion file content)
 RUN helm completion bash > "/usr/share/bash-completion/completions/helm" && \

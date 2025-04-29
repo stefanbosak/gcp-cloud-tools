@@ -46,7 +46,6 @@ fi
 # gcloud container clusters describe ${CLUSTER_NAME}
 export CLUSTER_NAME=$(gcloud container clusters list --project "${PROJECT_ID}" --filter="zone:(${REGION})" --format="value(name)")
 
-
 #export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 
 # configuration details
@@ -55,5 +54,7 @@ gcloud config set project "${PROJECT_ID}"
 gcloud config set compute/zone "${REGION}"
 gcloud config set compute/region "${REGION}"
 
-# get kube config file
-gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${REGION}" --project "${PROJECT_ID}"
+if [ ! -z "${CLUSTER_NAME}" ]; then
+  # get kube config file
+  gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${REGION}" --project "${PROJECT_ID}"
+fi

@@ -227,8 +227,16 @@ RUN groupadd --gid 1000 ${CONTAINER_USER} && \
          "ConnectTimeout 5\n" \
          "ServerAliveCountMax 2\n" \
          "ServerAliveInterval 15\n" > "/home/${CONTAINER_USER}/.ssh/config" && \
+    mkdir -v "/home/${CONTAINER_USER}/scripts"
+
+# copy Google Cloud Platform helper scripts into user profile inside container image
+#COPY ./set_gcp_environment.sh "/home/${CONTAINER_USER}/scripts"
+#COPY ./create_gke_cluster.sh "/home/${CONTAINER_USER}/scripts"
+#COPY ./create_gke_repository.sh "/home/${CONTAINER_USER}/scripts"
+COPY ./scripts "/home/${CONTAINER_USER}/scripts/"
+
 # make sure about owner consistency of user profile directory content
-    chown -vR ${CONTAINER_USER}:${CONTAINER_GROUP} "/home/${CONTAINER_USER}" && \
+RUN chown -vR ${CONTAINER_USER}:${CONTAINER_GROUP} "/home/${CONTAINER_USER}" && \
 # install required packages
     apt-get update && \
     apt-get -y dist-upgrade && \

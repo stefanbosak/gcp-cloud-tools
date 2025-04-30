@@ -162,7 +162,7 @@ fi
 
 # install k9s
 echo "Installing k9s CLI..."
-tar -zxf "k9s_Linux_${TARGETARCH}.tar.gz" -C "/usr/local/bin" --strip-components 1 --no-anchored "k9s"
+tar -zxf "k9s_Linux_${TARGETARCH}.tar.gz" -C "/usr/local/bin" --no-anchored "k9s"
 
 if [ ${?} -eq 0 ]; then
   echo "Tool k9s has been installed successfully"

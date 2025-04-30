@@ -193,6 +193,25 @@ else
   exit 1
 fi
 
+echo "Installing gcloud tools..."
+apt-get install -y \
+    google-cloud-cli=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-gke-gcloud-auth-plugin=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-kpt=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-skaffold=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-kubectl-oidc=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-local-extract=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-log-streaming=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-terraform-tools=${GCLOUD_CLI_VERSION}-0 \
+    google-cloud-cli-docker-credential-gcr=${GCLOUD_CLI_VERSION}-0
+
+if [ ${?} -eq 0 ]; then
+  echo "Tool gcloud has been installed successfully"
+else
+  echo "Tool gcloud has not been installed, terminating"
+  exit 1
+fi
+
 echo "Enabling completion for GCLOUD CLI..."
 bash -c "gcloud completion bash > ${bash_completion_dir}/gcloud"
 

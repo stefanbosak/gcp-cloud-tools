@@ -78,6 +78,9 @@ __scripts and files:__
 - [docker-run.sh](docker-run.sh): wrapper as Docker runner script
 - [docker-push.sh](docker-push.sh): wrapper for uploading image to container repository configured user
 - [docker-versions.sh](docker-versions.sh): wrapper for showing tools versions
+- [scripts](scripts): GCP helper scripts directory (can be mapped into container)
+- [scripts/set_gcp_environment.sh](scripts/set_gcp_environment.sh): GCP environment setup file (initialization via `. scripts/set_gcp_environment.sh`)
+- [.config](.config): .config directory for covering configuration data persistency (can be mapped into container)
 
 __additional applications included__
 Following tools are using latest available version within given Linux distribution release (when Docker image has been built/prepared):

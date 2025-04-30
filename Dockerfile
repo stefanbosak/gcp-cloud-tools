@@ -230,9 +230,6 @@ RUN groupadd --gid 1000 ${CONTAINER_USER} && \
     mkdir -v "/home/${CONTAINER_USER}/scripts"
 
 # copy Google Cloud Platform helper scripts into user profile inside container image
-#COPY ./set_gcp_environment.sh "/home/${CONTAINER_USER}/scripts"
-#COPY ./create_gke_cluster.sh "/home/${CONTAINER_USER}/scripts"
-#COPY ./create_gke_repository.sh "/home/${CONTAINER_USER}/scripts"
 COPY ./scripts "/home/${CONTAINER_USER}/scripts/"
 
 # make sure about owner consistency of user profile directory content

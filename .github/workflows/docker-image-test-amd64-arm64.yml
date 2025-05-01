@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-on-linux:
+  test-on-linux-x86:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,8 +29,35 @@ jobs:
           helm version
           kops version
           kubectl version --client
+          k9s version
           terraform version
           terragrunt --version
+          gcloud version
+
+  test-on-linux-arm:
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      packages: write
+    container:
+      image: docker.io/developmententity/gcp-cloud-tools:initial
+      options:
+        -v /dev:/dev
+
+    steps:
+      - name: 'Docker image test (arm64)'
+        run: |
+          ansible --version
+          aws --version
+          session-manager-plugin --version
+          sam --version
+          helm version
+          kops version
+          kubectl version --client
+          k9s version
+          terraform version
+          terragrunt --version
+          gcloud version
 
   test-on-mac-via-colima:
     runs-on: macos-latest
@@ -54,4 +81,6 @@ jobs:
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "helm version"
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "kops version"
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "kubectl version --client"
+          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "k9s version"
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "terragrunt --version"
+          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "gcloud version"

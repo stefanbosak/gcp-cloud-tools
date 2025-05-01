@@ -52,26 +52,3 @@ jobs:
           terraform version
           terragrunt --version
           gcloud version
-
-  test-on-mac-via-colima:
-    runs-on: macos-latest
-    steps:
-      - name: 'Install Colima and Docker'
-        run: |
-          brew install docker docker-compose colima
-          colima start --arch arm64
-      - name: Docker info
-        run: |
-          docker info
-      - name: 'Pull Docker image from Docker Hub'
-        run: |
-          docker pull docker.io/developmententity/gcp-cloud-tools:initial
-      - name: 'Run Docker image test (arm64)'
-        run: |
-          #docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "ansible --version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "helm version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "kops version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "kubectl version --client"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "k9s version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "terragrunt --version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "gcloud version"

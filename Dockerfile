@@ -7,7 +7,7 @@ ARG CONTAINER_USER=user
 ARG CONTAINER_GROUP=user
 
 # Debian release and options
-ARG DEBIAN_RELEASE=testing-slim
+ARG DEBIAN_RELEASE=stable-slim
 ARG DEBIAN_FRONTEND=noninteractive
 
 # ansible CLI tools versions

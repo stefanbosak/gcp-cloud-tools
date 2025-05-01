@@ -23,9 +23,6 @@ jobs:
       - name: 'Docker image test (amd64)'
         run: |
           #ansible --version
-          aws --version
-          session-manager-plugin --version
-          sam --version
           helm version
           kops version
           kubectl version --client
@@ -48,9 +45,6 @@ jobs:
       - name: 'Docker image test (arm64)'
         run: |
           #ansible --version
-          aws --version
-          session-manager-plugin --version
-          sam --version
           helm version
           kops version
           kubectl version --client
@@ -75,9 +69,6 @@ jobs:
       - name: 'Run Docker image test (arm64)'
         run: |
           #docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "ansible --version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "aws --version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "session-manager-plugin --version"
-          docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "sam --version"
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "helm version"
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "kops version"
           docker run --entrypoint "/bin/sh" --network=none --rm --name gcp-cloud-test docker.io/developmententity/gcp-cloud-tools:initial -c "kubectl version --client"

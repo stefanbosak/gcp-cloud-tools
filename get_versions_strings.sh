@@ -28,9 +28,9 @@ declare -A resources_dictionary
 
 resources_dictionary["ANSIBLE_CLI_VERSION"]="ansible/ansible"
 resources_dictionary["HELM_CLI_VERSION"]="helm/helm"
+resources_dictionary["K9S_CLI_VERSION"]="derailed/k9s"
 resources_dictionary["KOPS_CLI_VERSION"]="kubernetes/kops"
 resources_dictionary["KUBECTL_CLI_VERSION"]="kubernetes/kubernetes"
-resources_dictionary["K9S_CLI_VERSION"]="derailed/k9s"
 resources_dictionary["TERRAFORM_CLI_VERSION"]="hashicorp/terraform"
 resources_dictionary["TERRAGRUNT_CLI_VERSION"]="gruntwork-io/terragrunt"
 

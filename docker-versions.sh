@@ -22,13 +22,13 @@ echo -ne "ANSIBLE_CLI_VERSION="
 ANSIBLE_CLI_VERSION_STR=$(${DOCKER_CMD} "ansible --version")
 echo "${ANSIBLE_CLI_VERSION_STR}" | awk -F"core " '/core/{print "v"$2}' | sed 's/]//'
 
-echo -ne "GCLOUD_CLI_VERSION="
-GCLOUD_CLI_VERSION_STR=$(${DOCKER_CMD} "gcloud version")
-echo "${GCLOUD_CLI_VERSION_STR}" | awk -F' ' '{print $1}' | awk -F'/' '{print $2}'
-
 echo -ne "HELM_CLI_VERSION="
 HELM_CLI_VERSION_STR=$(${DOCKER_CMD} "helm version --short")
 echo "${HELM_CLI_VERSION_STR}" | awk -F'+' '{print $1}'
+
+echo -ne "K9S_CLI_VERSION="
+K9S_CLI_VERSION_STR=$(${DOCKER_CMD} "k9s version")
+echo "${K9S_CLI_VERSION_STR}" | awk '/Version:/ {print $2}'
 
 echo -ne "KOPS_CLI_VERSION="
 KOPS_CLI_VERSION_STR=$(${DOCKER_CMD} "kops version")
@@ -39,9 +39,6 @@ KUBECTL_CLI_VERSION_STR=$(${DOCKER_CMD} "kubectl version --client")
 echo "${KUBECTL_CLI_VERSION_STR}" | awk -F': ' 'NR==1 {print $2}'
 echo -ne "KUBECTL_CLI_VERSION="
 
-K9S_CLI_VERSION_STR=$(${DOCKER_CMD} "k9s version")
-echo "${K9S_CLI_VERSION_STR}" | awk '/Version:/ {print $2}'
-
 echo -ne "TERRAFORM_CLI_VERSION="
 TERRAFORM_CLI_VERSION_STR=$(${DOCKER_CMD} "terraform version")
 echo "${TERRAFORM_CLI_VERSION_STR}" | awk -F'v' 'NR==1 {print $2}'
@@ -49,3 +46,7 @@ echo "${TERRAFORM_CLI_VERSION_STR}" | awk -F'v' 'NR==1 {print $2}'
 echo -ne "TERRAGRUNT_CLI_VERSION="
 TERRAGRUNT_CLI_VERSION_STR=$(${DOCKER_CMD} "terragrunt --version")
 echo "${TERRAGRUNT_CLI_VERSION_STR}" | awk 'NR==1 {print $NF}'
+
+echo -ne "GCLOUD_CLI_VERSION="
+GCLOUD_CLI_VERSION_STR=$(${DOCKER_CMD} "gcloud version")
+echo "${GCLOUD_CLI_VERSION_STR}" | awk '/Google Cloud SDK/{print $NF}'

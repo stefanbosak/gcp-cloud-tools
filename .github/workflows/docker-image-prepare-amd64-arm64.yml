@@ -69,11 +69,11 @@ jobs:
             if [[ "${{ github.event.inputs.ANSIBLE_CLI_VERSION }}" != "" ]]; then
               sed -i "s/ANSIBLE_CLI_VERSION=.*/ANSIBLE_CLI_VERSION=${{ github.event.inputs.ANSIBLE_CLI_VERSION }}/g" /tmp/github_env_tail
             fi
-            if [[ "${{ github.event.inputs.GCLOUD_CLI_VERSION }}" != "" ]]; then
-              sed -i "s/GCLOUD_CLI_VERSION=.*/GCLOUD_CLI_VERSION=${{ github.event.inputs.GCLOUD_CLI_VERSION }}/g" /tmp/github_env_tail
-            fi
             if [[ "${{ github.event.inputs.HELM_CLI_VERSION }}" != "" ]]; then
               sed -i "s/HELM_CLI_VERSION=.*/HELM_CLI_VERSION=${{ github.event.inputs.HELM_CLI_VERSION }}/g" /tmp/github_env_tail
+            fi
+            if [[ "${{ github.event.inputs.K9S_CLI_VERSION }}" != "" ]]; then
+              sed -i "s/K9S_CLI_VERSION=.*/K9S_CLI_VERSION=${{ github.event.inputs.K9S_CLI_VERSION }}/g" /tmp/github_env_tail
             fi
             if [[ "${{ github.event.inputs.KOPS_CLI_VERSION }}" != "" ]]; then
               sed -i "s/KOPS_CLI_VERSION=.*/KOPS_CLI_VERSION=${{ github.event.inputs.KOPS_CLI_VERSION }}/g" /tmp/github_env_tail
@@ -81,14 +81,14 @@ jobs:
             if [[ "${{ github.event.inputs.KUBECTL_CLI_VERSION }}" != "" ]]; then
               sed -i "s/KUBECTL_CLI_VERSION=.*/KUBECTL_CLI_VERSION=${{ github.event.inputs.KUBECTL_CLI_VERSION }}/g" /tmp/github_env_tail
             fi
-            if [[ "${{ github.event.inputs.K9S_CLI_VERSION }}" != "" ]]; then
-              sed -i "s/K9S_CLI_VERSION=.*/K9S_CLI_VERSION=${{ github.event.inputs.K9S_CLI_VERSION }}/g" /tmp/github_env_tail
-            fi
             if [[ "${{ github.event.inputs.TERRAFORM_CLI_VERSION }}" != "" ]]; then
               sed -i "s/TERRAFORM_CLI_VERSION=.*/TERRAFORM_CLI_VERSION=${{ github.event.inputs.TERRAFORM_CLI_VERSION }}/g" /tmp/github_env_tail
             fi
             if [[ "${{ github.event.inputs.TERRAGRUNT_CLI_VERSION }}" != "" ]]; then
               sed -i "s/TERRAGRUNT_CLI_VERSION=.*/TERRAGRUNT_CLI_VERSION=${{ github.event.inputs.TERRAGRUNT_CLI_VERSION }}/g" /tmp/github_env_tail
+            fi
+            if [[ "${{ github.event.inputs.GCLOUD_CLI_VERSION }}" != "" ]]; then
+              sed -i "s/GCLOUD_CLI_VERSION=.*/GCLOUD_CLI_VERSION=${{ github.event.inputs.GCLOUD_CLI_VERSION }}/g" /tmp/github_env_tail
             fi
             if [[ "${{ github.event.inputs.CONTAINER_TAG }}" != "" ]]; then
               sed -i "s/CONTAINER_TAG=.*/CONTAINER_TAG=${{ github.event.inputs.CONTAINER_TAG }}/g" >> ${GITHUB_ENV}
@@ -141,13 +141,13 @@ jobs:
           file: ./Dockerfile
           build-args: |
             ANSIBLE_CLI_VERSION=${{ env.ANSIBLE_CLI_VERSION }}
-            GCLOUD_CLI_VERSION=${{ env.GCLOUD_CLI_VERSION }}
             HELM_CLI_VERSION=${{ env.HELM_CLI_VERSION }}
+            K9S_CLI_VERSION=${{ env.K9S_CLI_VERSION }}
             KOPS_CLI_VERSION=${{ env.KOPS_CLI_VERSION }}
             KUBECTL_CLI_VERSION=${{ env.KUBECTL_CLI_VERSION }}
-            K9S_CLI_VERSION=${{ env.K9S_CLI_VERSION }}
             TERRAFORM_CLI_VERSION=${{ env.TERRAFORM_CLI_VERSION }}
             TERRAGRUNT_CLI_VERSION=${{ env.TERRAGRUNT_CLI_VERSION }}
+            GCLOUD_CLI_VERSION=${{ env.GCLOUD_CLI_VERSION }}
             WORKSPACE_ROOT_DIR=${{ env.WORKSPACE_ROOT_DIR }}
           load: false
           provenance: false
@@ -161,13 +161,13 @@ jobs:
           file: ./Dockerfile
           build-args: |
             ANSIBLE_CLI_VERSION=${{ env.ANSIBLE_CLI_VERSION }}
-            GCLOUD_CLI_VERSION=${{ env.GCLOUD_CLI_VERSION }}
             HELM_CLI_VERSION=${{ env.HELM_CLI_VERSION }}
+            K9S_CLI_VERSION=${{ env.K9S_CLI_VERSION }}
             KOPS_CLI_VERSION=${{ env.KOPS_CLI_VERSION }}
             KUBECTL_CLI_VERSION=${{ env.KUBECTL_CLI_VERSION }}
-            K9S_CLI_VERSION=${{ env.K9S_CLI_VERSION }}
             TERRAFORM_CLI_VERSION=${{ env.TERRAFORM_CLI_VERSION }}
             TERRAGRUNT_CLI_VERSION=${{ env.TERRAGRUNT_CLI_VERSION }}
+            GCLOUD_CLI_VERSION=${{ env.GCLOUD_CLI_VERSION }}
             WORKSPACE_ROOT_DIR=${{ env.WORKSPACE_ROOT_DIR }}
           load: true
           provenance: false
@@ -177,14 +177,22 @@ jobs:
       - name: 'Test Docker image (amd64)'
         if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
         run: |
+          echo -ne "ANSIBLE_CLI_VERSION="
           docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "ansible --version"
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "gcloud version"
+          echo -ne "HELM_CLI_VERSION="
           docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "helm version"
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kops version"
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kubectl version --client"
+          echo -ne "K9S_CLI_VERSION="
           docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "k9s version"
+          echo -ne "KOPS_CLI_VERSION="
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kops version"
+          echo -ne "KUBECTL_CLI_VERSION="
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kubectl version --client"
+          echo -ne "TERRAFORM_CLI_VERSION="
           docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "terraform version"
+          echo -ne "TERRAGRUNT_CLI_VERSION="
           docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "terragrunt --version"
+          echo -ne "GCLOUD_CLI_VERSION="
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "gcloud version"
       - name: 'Tag and push multi-platforms Docker images to preconfigured container registries'
         if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
         uses: docker/build-push-action@master
@@ -193,13 +201,13 @@ jobs:
           file: ./Dockerfile
           build-args: |
             ANSIBLE_CLI_VERSION=${{ env.ANSIBLE_CLI_VERSION }}
-            GCLOUD_CLI_VERSION=${{ env.GCLOUD_CLI_VERSION }}
             HELM_CLI_VERSION=${{ env.HELM_CLI_VERSION }}
+            K9S_CLI_VERSION=${{ env.K9S_CLI_VERSION }}
             KOPS_CLI_VERSION=${{ env.KOPS_CLI_VERSION }}
             KUBECTL_CLI_VERSION=${{ env.KUBECTL_CLI_VERSION }}
-            K9S_CLI_VERSION=${{ env.K9S_CLI_VERSION }}
             TERRAFORM_CLI_VERSION=${{ env.TERRAFORM_CLI_VERSION }}
             TERRAGRUNT_CLI_VERSION=${{ env.TERRAGRUNT_CLI_VERSION }}
+            GCLOUD_CLI_VERSION=${{ env.GCLOUD_CLI_VERSION }}
             WORKSPACE_ROOT_DIR=${{ env.WORKSPACE_ROOT_DIR }}
           push: true
           provenance: false

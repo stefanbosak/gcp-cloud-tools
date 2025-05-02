@@ -42,6 +42,8 @@ LABEL stage="gcp-cloud-tools-builder" \
       description="Debian-based container builder for preparing GCP cloud tools"
 
 ARG DEBIAN_FRONTEND
+
+ARG WORKSPACE_ROOT_DIR
 WORKDIR "${WORKSPACE_ROOT_DIR}"
 
 # install required packages and additional applications

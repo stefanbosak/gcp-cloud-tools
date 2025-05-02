@@ -39,7 +39,9 @@ ARG TERRAGRUNT_CLI_VERSION=v0.77.22
 FROM debian:${DEBIAN_RELEASE} AS gcp-cloud-tools-builder
 
 LABEL stage="gcp-cloud-tools-builder" \
-      description="Debian-based container builder for preparing GCP cloud tools"
+      description="Debian-based container builder for preparing GCP cloud tools" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tools" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG DEBIAN_FRONTEND
 
@@ -55,7 +57,9 @@ RUN apt-get update && \
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-ansible-cli-builder
 
 LABEL stage="gcp-cloud-tools-ansible-cli-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool ansible"
+      description="Debian-based container builder for preparing GCP cloud tool ansible" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool ansible" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -73,7 +77,9 @@ RUN python3 -m pip install --break-system-packages  "https://github.com/ansible/
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-helm-builder
 
 LABEL stage="gcp-cloud-tools-helm-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool HELM CLI"
+      description="Debian-based container builder for preparing GCP cloud tool HELM CLI" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool HELM CLI" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -93,7 +99,9 @@ RUN mkdir -v "${WORKSPACE_ROOT_DIR}/helm" && tar -zxf "helm-${HELM_CLI_VERSION}-
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-kops-builder
 
 LABEL stage="gcp-cloud-tools-kubectl-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool kops CLI"
+      description="Debian-based container builder for preparing GCP cloud tool kops CLI" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool kops CLI" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -113,7 +121,9 @@ RUN install -v -o root -g root -m 0755 "${WORKSPACE_ROOT_DIR}/kops-${TARGETOS}-$
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-kubectl-builder
 
 LABEL stage="gcp-cloud-tools-kubectl-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool kubectl CLI"
+      description="Debian-based container builder for preparing GCP cloud tool kubectl CLI" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool kubectl CLI" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -133,7 +143,9 @@ RUN install -v -o root -g root -m 0755 "${WORKSPACE_ROOT_DIR}/kubectl" "/usr/loc
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-k9s-builder
 
 LABEL stage="gcp-cloud-tools-k9s-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool k9s CLI"
+      description="Debian-based container builder for preparing GCP cloud tool k9s CLI" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool k9s CLI" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -152,7 +164,9 @@ RUN tar -zxf "k9s_Linux_${TARGETARCH}.tar.gz" -C "/usr/local/bin" --no-anchored 
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-terraform-builder
 
 LABEL stage="gcp-cloud-tools-terraform-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool terraform"
+      description="Debian-based container builder for preparing GCP cloud tool terraform" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool terraform" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -172,7 +186,9 @@ RUN unzip "terraform_${TERRAFORM_CLI_VERSION}_${TARGETOS}_${TARGETARCH}.zip" -d 
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-terragrunt-builder
 
 LABEL stage="gcp-cloud-tools-kubectl-builder" \
-      description="Debian-based container builder for preparing GCP cloud tool terragrunt CLI"
+      description="Debian-based container builder for preparing GCP cloud tool terragrunt CLI" \
+      org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool terragrunt CLI" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -192,7 +208,9 @@ RUN install -v -o root -g root -m 0755 "${WORKSPACE_ROOT_DIR}/terragrunt_${TARGE
 FROM debian:${DEBIAN_RELEASE} AS gcp-cloud-tools-image
 
 LABEL stage="gcp-cloud-tools-image" \
-      description="Debian-based container with GCP cloud tools"
+      description="Debian-based container with GCP cloud tools" \
+      org.opencontainers.image.description="Debian-based container with GCP cloud tools" \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG CONTAINER_USER
 ARG CONTAINER_GROUP

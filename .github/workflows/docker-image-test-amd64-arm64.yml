@@ -21,6 +21,7 @@ jobs:
 
     steps:
       - name: 'Docker image test (amd64)'
+        shell: bash
         run: |
           # ansible require write permissions even for request for version
           # (temporarily disable)
@@ -55,6 +56,7 @@ jobs:
 
     steps:
       - name: 'Docker image test (arm64)'
+        shell: bash
         run: |
           # ansible require write permissions even for request for version
           # (temporarily disable)

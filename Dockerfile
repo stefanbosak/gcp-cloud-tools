@@ -13,17 +13,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 # ansible CLI tools versions
 ARG ANSIBLE_CLI_VERSION=2.19.0b1
 
-# gcloud CLI version
-ARG GCLOUD_CLI_VERSION=519.0.0
-
 # Helm version
 ARG HELM_CLI_VERSION=v3.17.3
 
 # kubectl version
-ARG KUBECTL_CLI_VERSION=v1.33.0
+ARG K9S_CLI_VERSION=v0.50.4
 
 # kubectl version
-ARG K9S_CLI_VERSION=v0.50.4
+ARG KUBECTL_CLI_VERSION=v1.33.0
 
 # kops version
 ARG KOPS_CLI_VERSION=v1.31.0
@@ -34,6 +31,8 @@ ARG TERRAFORM_CLI_VERSION=1.11.4
 # Terragrunt version
 ARG TERRAGRUNT_CLI_VERSION=v0.77.22
 
+# gcloud CLI version
+ARG GCLOUD_CLI_VERSION=520.0.0
 
 # container as builder for preparing GCP cloud tools
 FROM debian:${DEBIAN_RELEASE} AS gcp-cloud-tools-builder

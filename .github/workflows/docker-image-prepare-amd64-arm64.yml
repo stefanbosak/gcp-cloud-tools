@@ -14,12 +14,12 @@ on:
         description: 'ANSIBLE_CLI_VERSION (2.19.0b1)'
         required: false
         type: string
-      GCLOUD_CLI_VERSION:
-        description: 'GCLOUD_CLI_VERSION (519.0.0)'
-        required: false
-        type: string
       HELM_CLI_VERSION:
         description: 'HELM_CLI_VERSION (v3.17.3)'
+        required: false
+        type: string
+      K9S_CLI_VERSION:
+        description: 'K9S_CLI_VERSION (v0.50.4)'
         required: false
         type: string
       KOPS_CLI_VERSION:
@@ -30,16 +30,16 @@ on:
         description: 'KUBECTL_CLI_VERSION (v1.33.0)'
         required: false
         type: string
-      K9S_CLI_VERSION:
-        description: 'K9S_CLI_VERSION (v0.50.4)'
-        required: false
-        type: string
       TERRAFORM_CLI_VERSION:
         description: 'TERRAFORM_CLI_VERSION (1.11.4)'
         required: false
         type: string
       TERRAGRUNT_CLI_VERSION:
-        description: 'TERRAGRUNT_CLI_VERSION (v0.77.22)'
+        description: 'TERRAGRUNT_CLI_VERSION (v0.78.0)'
+        required: false
+        type: string
+      GCLOUD_CLI_VERSION:
+        description: 'GCLOUD_CLI_VERSION (520.0.0)'
         required: false
         type: string
       CONTAINER_TAG:
@@ -178,21 +178,21 @@ jobs:
         if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
         run: |
           echo -ne "ANSIBLE_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "ansible --version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "ansible --version" | awk -F"core " '/core/{print "v"$2}' | sed 's/]//'
           echo -ne "HELM_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "helm version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "helm version --short" | awk -F'+' '{print $1}'
           echo -ne "K9S_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "k9s version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "k9s version" | awk '/Version:/ {print $2}'
           echo -ne "KOPS_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kops version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kops version" | awk -F'git-' 'NR==1 {print $2}' | sed 's/)//'
           echo -ne "KUBECTL_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kubectl version --client"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "kubectl version --client" | awk -F': ' 'NR==1 {print $2}'
           echo -ne "TERRAFORM_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "terraform version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "terraform version" | awk -F'v' 'NR==1 {print $2}'
           echo -ne "TERRAGRUNT_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "terragrunt --version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "terragrunt --version" | awk 'NR==1 {print $NF}'
           echo -ne "GCLOUD_CLI_VERSION="
-          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "gcloud version"
+          docker container run --platform linux/amd64 --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "gcloud version" | awk '/Google Cloud SDK/{print $NF}'
       - name: 'Tag and push multi-platforms Docker images to preconfigured container registries'
         if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
         uses: docker/build-push-action@master

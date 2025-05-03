@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-on-linux-x86:
+  test-on-linux:
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:

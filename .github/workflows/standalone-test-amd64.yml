@@ -28,8 +28,6 @@ jobs:
           sudo ./standalone-install.sh
       - name: 'GCP cloud tools test (amd64)'
         run: |
-          echo -ne "ANSIBLE_CLI_VERSION="
-          ansible --version | awk -F"core " '/core/{print "v"$2}' | sed 's/]//'
           echo -ne "HELM_CLI_VERSION="
           helm version --short | awk -F'+' '{print $1}'
           echo -ne "K9S_CLI_VERSION="

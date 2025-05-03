@@ -22,7 +22,8 @@ jobs:
     steps:
       - name: 'Docker image test (amd64)'
         run: |
-          #sudo mkdir .ansible && sudo chmod -R a+rw .ansible
+          # ansible require write permissions even for request for version
+          # (temporarily disable)
           #echo -ne "ANSIBLE_CLI_VERSION="
           #ansible --version | awk -F"core " '/core/{print "v"$2}' | sed 's/]//'
           echo -ne "HELM_CLI_VERSION="
@@ -37,8 +38,10 @@ jobs:
           terraform version | awk -F'v' 'NR==1 {print $2}'
           echo -ne "TERRAGRUNT_CLI_VERSION="
           terragrunt --version | awk 'NR==1 {print $NF}'
-          echo -ne "GCLOUD_CLI_VERSION="
-          gcloud version | awk '/Google Cloud SDK/{print $NF}'
+          # gcloud require write permissions even for request for version
+          # (temporarily disable)
+          #echo -ne "GCLOUD_CLI_VERSION="
+          #gcloud version | awk '/Google Cloud SDK/{print $NF}'
 
   test-on-linux-arm:
     runs-on: ubuntu-24.04-arm
@@ -53,7 +56,8 @@ jobs:
     steps:
       - name: 'Docker image test (arm64)'
         run: |
-          #sudo mkdir .ansible && sudo chmod -R a+rw .ansible
+          # ansible require write permissions even for request for version
+          # (temporarily disable)
           #echo -ne "ANSIBLE_CLI_VERSION="
           #ansible --version | awk -F"core " '/core/{print "v"$2}' | sed 's/]//'
           echo -ne "HELM_CLI_VERSION="
@@ -68,5 +72,7 @@ jobs:
           terraform version | awk -F'v' 'NR==1 {print $2}'
           echo -ne "TERRAGRUNT_CLI_VERSION="
           terragrunt --version | awk 'NR==1 {print $NF}'
-          echo -ne "GCLOUD_CLI_VERSION="
-          gcloud version | awk '/Google Cloud SDK/{print $NF}'
+          # gcloud require write permissions even for request for version
+          # (temporarily disable)
+          #echo -ne "GCLOUD_CLI_VERSION="
+          #gcloud version | awk '/Google Cloud SDK/{print $NF}'

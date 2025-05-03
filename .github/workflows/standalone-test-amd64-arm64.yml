@@ -52,15 +52,15 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@main
-      - name: 'Install required packages (amd64)'
+      - name: 'Install required packages (arm64)'
         run: |
           sudo apt-get update && \
           sudo apt-get -y --no-install-recommends install ca-certificates && \
           sudo apt-get clean && sudo rm -rf "/var/lib/apt/lists/*"
-      - name: 'Perform standalone install (amd64)'
+      - name: 'Perform standalone install (arm64)'
         run: |
           sudo ./standalone-install.sh
-      - name: 'GCP cloud tools test (amd64)'
+      - name: 'GCP cloud tools test (arm64)'
         run: |
           echo -ne "HELM_CLI_VERSION="
           helm version --short | awk -F'+' '{print $1}'

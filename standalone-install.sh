@@ -115,7 +115,7 @@ resources_dictionary["terragrunt"]="https://github.com/gruntwork-io/terragrunt/r
 
 ## now loop through the above dictionary items
 for key in "${!resources_dictionary[@]}"; do
-  echo -ne "Downloading ${key}..."
+  echo -ne "Downloading [${key}] ( ${resources_dictionary[$key]} ) ..."
   curl -sLJSO "${resources_dictionary[$key]}"
 
   if [ ${?} -eq 0 ]; then

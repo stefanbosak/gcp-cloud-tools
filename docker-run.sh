@@ -34,20 +34,14 @@ if [ ${#} -eq 0 ]; then
   docker container run --platform ${TARGETPLATFORM} -ti -v /dev:/dev \
                        -v "${cwd}/scripts":"/home/user/scripts" \
                        -v "${cwd}/.config":"/home/user/.config" \
-                       --network=host --rm --name "${CONTAINER_NAME}" "${CONTAINER_IMAGE}"
+                       --network=host --rm --name "${CONTAINER_NAME}" \
+                       "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}"
 else
   # when any argument recognized only execute requested application/command inside container (oneshot action)
   docker container run --platform ${TARGETPLATFORM} --entrypoint "/bin/sh" \
                        -v "${cwd}/scripts":"/home/user/scripts" \
                        -v "${cwd}/.config":"/home/user/.config" \
-                       --network=host --rm --name "${CONTAINER_NAME}" "${CONTAINER_IMAGE}" -c "${*}"
-fi
-
-if [ ${?} -ne 0 ]; then
-  echo -e "\nCheck docker please.\n" \
-          "It seems that container image ${CONTAINER_IMAGE} not found:\n" \
-          " probably not executed ${cwd}/docker-build.sh or\n" \
-          " not set remote container registry using variable \n" \
-          " CONTAINER_REPOSITORY via ${cwd}/setvariables.sh"
-  exit 1
+                       --network=host --rm --name "${CONTAINER_NAME}" \
+                       "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}" \
+                       -c "${*}"
 fi

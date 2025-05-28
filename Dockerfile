@@ -304,6 +304,9 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
 # - DinD via QEMU on ARM64 is not supported
 #   (ARM64 requires ARM64 kernel from host system which is not present on AMD64 host)
     curl -fsSL https://get.docker.com | sh && \
+    if ! getent group docker > /dev/null 2>&1; then \
+      groupadd docker; \
+    fi && \
     usermod -aG docker "${CONTAINER_USER}"
 
 # user home directory as workdir

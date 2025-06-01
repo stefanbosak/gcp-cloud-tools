@@ -54,5 +54,6 @@ docker buildx build --network=host --force-rm --rm \
                     -t "${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}" \
                     -f "${cwd}/Dockerfile" "${cwd}"
 
-# clean temporary images
-docker image prune -f --filter label="stage=gcp-cloud-tools-*" --filter "dangling=true"
+# clean temporary stage images
+# - regexp in container image filters are still not supported in Docker
+docker image prune -f --filter "label=stage=${CONTAINER_IMAGE_NAME}-image"

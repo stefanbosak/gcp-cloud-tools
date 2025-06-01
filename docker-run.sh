@@ -29,23 +29,30 @@ for tool in ${TOOLS}; do
   fi
 done
 
-if [ ${#} -eq 0 ]; then
+if [ ! -z "${CONTAINER_REPOSITORY}" ]; then
+  docker pull "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}"
+fi
+
+# check if there is remote or local image is present
+if [ ! -z "$(docker image ls --filter "reference=${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}" --format "{{.Repository}}:{{.Tag}}")" ]; then
+  if [ ${#} -eq 0 ]; then
   # when no argument(s) provided just use container as GCP cloud ecosystem/environment accessor containing necessary tools
-  docker container run --platform ${TARGETPLATFORM} -ti -v /dev:/dev --privileged \
-                       -v "${cwd}/.config":"/home/${CONTAINER_USER}/.config" \
-                       -v "${cwd}/.docker":"/home/${CONTAINER_USER}/.docker" \
-                       -v "${cwd}/scripts":"/home/${CONTAINER_USER}/scripts" \
-                       --network=host --rm --name "${CONTAINER_NAME}" \
-                       --group-add "docker" \
-                       "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}"
-else
-  # when any argument recognized only execute requested application/command inside container (oneshot action)
-  docker container run --platform ${TARGETPLATFORM} --privileged --entrypoint "/bin/sh" \
-                       -v "${cwd}/.config":"/home/${CONTAINER_USER}/.config" \
-                       -v "${cwd}/.docker":"/home/${CONTAINER_USER}/.docker" \
-                       -v "${cwd}/scripts":"/home/${CONTAINER_USER}/scripts" \
-                       --network=host --rm --name "${CONTAINER_NAME}" \
-                       --group-add "docker" \
-                       "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}" \
-                       -c "${*}"
+    docker container run --platform ${TARGETPLATFORM} -ti -v /dev:/dev --privileged \
+                         -v "${cwd}/.config":"/home/${CONTAINER_USER}/.config" \
+                         -v "${cwd}/.docker":"/home/${CONTAINER_USER}/.docker" \
+                         -v "${cwd}/scripts":"/home/${CONTAINER_USER}/scripts" \
+                         --network=host --rm --name "${CONTAINER_NAME}" \
+                         --group-add "docker" \
+                         "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}"
+  else
+    # when any argument recognized only execute requested application/command inside container (oneshot action)
+    docker container run --platform ${TARGETPLATFORM} --privileged --entrypoint "/bin/sh" \
+                         -v "${cwd}/.config":"/home/${CONTAINER_USER}/.config" \
+                         -v "${cwd}/.docker":"/home/${CONTAINER_USER}/.docker" \
+                         -v "${cwd}/scripts":"/home/${CONTAINER_USER}/scripts" \
+                         --network=host --rm --name "${CONTAINER_NAME}" \
+                         --group-add "docker" \
+                         "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}" \
+                         -c "${*}"
+  fi
 fi

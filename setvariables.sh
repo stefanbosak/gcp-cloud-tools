@@ -2,8 +2,6 @@
 #
 # Configuration of versions and other variables
 #
-# changed: 2025-Apr-23
-#
 # NOTEs:
 # - any execution and modification(s) is only in responsibility of user
 # - add container volume mapping(s) based on user preference
@@ -44,10 +42,10 @@ export CONTAINER_USER=${CONTAINER_USER:-"user"}
 export CONTAINER_GROUP=${CONTAINER_GROUP:-"user"}
 
 # container name
-export CONTAINER_NAME=${CONTAINER_NAME:-"gcp-cloud-tools"}
+export CONTAINER_NAME=${CONTAINER_NAME:-"$(basename ${cwd})"}
 
 # container image name
-export CONTAINER_IMAGE_NAME=${CONTAINER_IMAGE_NAME:-"gcp-cloud-tools"}
+export CONTAINER_IMAGE_NAME=${CONTAINER_IMAGE_NAME:-"${CONTAINER_NAME}"}
 
 # it is crutial to have ":" in the beginning of the string
 export CONTAINER_IMAGE_TAG=${CONTAINER_TAG:-":initial"}
@@ -64,7 +62,7 @@ export DOCKER_DEFAULT_PLATFORM="${TARGETPLATFORM}"
 export ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION:-2.19.0b4}
 
 # Helm version
-export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.18.0}
+export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.18.1}
 
 # k9s version
 export K9S_CLI_VERSION=${K9S_CLI_VERSION:-v0.50.6}
@@ -79,66 +77,69 @@ export KUBECTL_CLI_VERSION=${KUBECTL_CLI_VERSION:-v1.33.1}
 export TERRAFORM_CLI_VERSION=${TERRAFORM_CLI_VERSION:-1.12.1}
 
 # Terragrunt version
-export TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION:-v0.80.2}
+export TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION:-v0.80.4}
 
 # gcloud CLI tool version
-export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-523.0.1}
+export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-524.0.0}
 
-if [[ ! -f "${GITHUB_ENV_TAIL_FILE}" ]]; then
-  echo "ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION}" > "${GITHUB_ENV_TAIL_FILE}"
-  echo "HELM_CLI_VERSION=${HELM_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-  echo "K9S_CLI_VERSION=${K9S_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-  echo "KOPS_CLI_VERSION=${KOPS_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-  echo "KUBECTL_CLI_VERSION=${KUBECTL_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-  echo "TERRAFORM_CLI_VERSION=${TERRAFORM_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-  echo "TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-  echo "GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
-fi
-
-# get CLI_VERSIONS_CHANGED_FLAG if has been found
-CLI_VERSIONS_CHANGED_FLAG=$(awk -F"=" '/CLI_VERSIONS_CHANGED/{print $2}' "${GITHUB_ENV_TAIL_FILE}")
-
-# remove CLI_VERSIONS_CHANGED if in place
-sed -i "/CLI_VERSIONS_CHANGED/d" "${GITHUB_ENV_TAIL_FILE}"
-
-# pushed versions capture details
-PUSHED_CLI_VERSIONS_FILE_DIR=${PUSHED_CLI_VERSIONS_FILE_DIR:-"${cwd}"}
-PUSHED_CLI_VERSIONS_FILE_NAME_PATH=${PUSHED_CLI_VERSIONS_FILE_NAME_PATH:-"${PUSHED_CLI_VERSIONS_FILE_DIR}/PUSHED_CLI_VERSIONS.txt"}
-
-if [ -z "${CLI_VERSIONS_CHANGED_FLAG}" ]; then
-  # versions have not changed
-  CLI_VERSIONS_CHANGED_FLAG=0
-fi
-
-if [[ ! -f "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}" ]]; then
-  touch "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
-fi
-
-# check if any versions are different (requested vs pushed) since last push
-CLI_VERSIONS_CHANGED_DIFF=$(diff "${GITHUB_ENV_TAIL_FILE}" "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}")
-
-if [ ! -z "${CLI_VERSIONS_CHANGED_DIFF}" ]; then
-  # versions have changed
-  CLI_VERSIONS_CHANGED_FLAG=1
-
-  # store versions change in repository as snapshot
-  cp -f "${GITHUB_ENV_TAIL_FILE}" "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
-
-  if [ "${PUSHED_CLI_VERSIONS_FILE_DIR}"  == "${cwd}" ]; then
-    export GIT_USER_NAME="GitHub Actions"
-    export GIT_USER_EMAIL="<>"
-    export GIT_COMMITTER_NAME="${GIT_USER_NAME}"
-    export GIT_COMMITTER_EMAIL="${GIT_USER_EMAIL}"
-    export GIT_AUTHOR_NAME="${GIT_USER_NAME}"
-    export GIT_AUTHOR_EMAIL="${GIT_USER_EMAIL}"
-
-    git diff -- "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
-    git add "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
-    git commit -o "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}" -m "Updated PUSHED_CLI_VERSIONS.txt"
-    git pull --rebase
+# skip changing PUSHED_VERSIONS.txt when called locally from docker*.sh scripts
+if [[ ! "${BASH_SOURCE[1]}" =~ docker.*\.sh ]]; then
+  if [[ ! -f "${GITHUB_ENV_TAIL_FILE}" ]]; then
+    echo "ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION}" > "${GITHUB_ENV_TAIL_FILE}"
+    echo "HELM_CLI_VERSION=${HELM_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
+    echo "K9S_CLI_VERSION=${K9S_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
+    echo "KOPS_CLI_VERSION=${KOPS_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
+    echo "KUBECTL_CLI_VERSION=${KUBECTL_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
+    echo "TERRAFORM_CLI_VERSION=${TERRAFORM_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
+    echo "TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
+    echo "GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION}" >> "${GITHUB_ENV_TAIL_FILE}"
   fi
-fi
 
-# set environment variable regarding CLI_VERSIONS_CHANGED
-# (used in GitHub Actions workflow as condition variable for workflow steps)
-echo "CLI_VERSIONS_CHANGED=${CLI_VERSIONS_CHANGED_FLAG}" >> "${GITHUB_ENV_TAIL_FILE}"
+  # get CLI_VERSIONS_CHANGED_FLAG if has been found
+  CLI_VERSIONS_CHANGED_FLAG=$(awk -F"=" '/CLI_VERSIONS_CHANGED/{print $2}' "${GITHUB_ENV_TAIL_FILE}")
+
+  # remove CLI_VERSIONS_CHANGED if in place
+  sed -i "/CLI_VERSIONS_CHANGED/d" "${GITHUB_ENV_TAIL_FILE}"
+
+  # pushed versions capture details
+  PUSHED_CLI_VERSIONS_FILE_DIR=${PUSHED_CLI_VERSIONS_FILE_DIR:-"${cwd}"}
+  PUSHED_CLI_VERSIONS_FILE_NAME_PATH=${PUSHED_CLI_VERSIONS_FILE_NAME_PATH:-"${PUSHED_CLI_VERSIONS_FILE_DIR}/PUSHED_CLI_VERSIONS.txt"}
+
+  if [ -z "${CLI_VERSIONS_CHANGED_FLAG}" ]; then
+    # versions have not changed
+    CLI_VERSIONS_CHANGED_FLAG=0
+  fi
+
+  if [[ ! -f "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}" ]]; then
+    touch "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
+  fi
+
+  # check if any versions are different (requested vs pushed) since last push
+  CLI_VERSIONS_CHANGED_DIFF=$(diff "${GITHUB_ENV_TAIL_FILE}" "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}")
+
+  if [ ! -z "${CLI_VERSIONS_CHANGED_DIFF}" ]; then
+    # versions have changed
+    CLI_VERSIONS_CHANGED_FLAG=1
+
+    # store versions change in repository as snapshot
+    cp -f "${GITHUB_ENV_TAIL_FILE}" "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
+
+    if [ "${PUSHED_CLI_VERSIONS_FILE_DIR}"  == "${cwd}" ]; then
+      export GIT_USER_NAME="GitHub Actions"
+      export GIT_USER_EMAIL="<>"
+      export GIT_COMMITTER_NAME="${GIT_USER_NAME}"
+      export GIT_COMMITTER_EMAIL="${GIT_USER_EMAIL}"
+      export GIT_AUTHOR_NAME="${GIT_USER_NAME}"
+      export GIT_AUTHOR_EMAIL="${GIT_USER_EMAIL}"
+
+      git diff -- "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
+      git add "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}"
+      git commit -o "${PUSHED_CLI_VERSIONS_FILE_NAME_PATH}" -m "Updated PUSHED_CLI_VERSIONS.txt"
+      git pull --rebase
+    fi
+  fi
+
+  # set environment variable regarding CLI_VERSIONS_CHANGED
+  # (used in GitHub Actions workflow as condition variable for workflow steps)
+  echo "CLI_VERSIONS_CHANGED=${CLI_VERSIONS_CHANGED_FLAG}" >> "${GITHUB_ENV_TAIL_FILE}"
+fi

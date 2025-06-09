@@ -16,15 +16,13 @@ fi
 # organization attributes
 # gcloud organizations list
 # gcloud organizations describe ${ORGANIZATION_ID}
-export ORGANIZATION_NAME=
 export ORGANIZATION_ID=
-export ORGANIZATION_NUMBER=
+export ORGANIZATION_NUMBER=${ORGANIZATION_ID}
+export ORGANIZATION_NAME=$( gcloud organizations describe "${ORGANIZATION_ID}" --format="json" | jq -r '.displayName')
 
 # project attributes
 # gcloud projects list
 # gcloud config get-value project
-# gcloud projects describe ${PROJECT_ID}
-export PROJECT_NAME=
 
 # gcloud projects list --format="table(projectId)"
 export PROJECT_ID=
@@ -35,13 +33,16 @@ if [ -z "${PROJECT_ID}" ]; then
   exit 1
 fi
 
+# gcloud projects describe ${PROJECT_ID}
+export PROJECT_NAME=$(gcloud projects describe "${PROJECT_ID}" --format="json(name)" | jq -r .name)
+
 # gcloud projects list --format="table(projectNumber)"
-export PROJECT_NUMBER=
+export PROJECT_NUMBER=$(gcloud projects describe "${PROJECT_ID}" --format="json(projectNumber)" | jq -r .projectNumber)
 
 # location attributes
 # gcloud compute regions list
 # gcloud config get-value compute/region
-export REGION=
+export REGION=$(gcloud config get-value compute/region)
 
 # REGION is required attribute, if empty terminate
 if [ -z "${REGION}" ]; then
@@ -74,3 +75,8 @@ if [ ! -z "${CLUSTER_NAME}" ]; then
   # get kube config file
   gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${REGION}" --project "${PROJECT_ID}"
 fi
+
+export REGION=$(echo "${REGION}" | sed 's/-.$//')
+
+# authentication to artifact repository
+gcloud auth configure-docker ${REGION}-docker.pkg.dev

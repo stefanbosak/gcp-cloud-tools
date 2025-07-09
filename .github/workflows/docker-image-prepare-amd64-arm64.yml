@@ -46,6 +46,11 @@ on:
         description: 'CONTAINER_TAG (initial)'
         required: false
         type: string
+      SKIP_VERSION_CHANGE:
+        description: 'SKIP_VERSION_CHANGE (false)'
+        required: false
+        type: boolean
+        default: false
 
 env:
   GH_REGISTRY: ghcr.io
@@ -107,12 +112,12 @@ jobs:
           echo "GITHUB_ENV:"
           cat ${GITHUB_ENV}
       - name: 'Set up QEMU (arm64)'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/setup-qemu-action@master
         with:
           platforms: linux/arm64
       - name: 'Set up Docker buildx'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/setup-buildx-action@master
         with:
           version: latest
@@ -120,7 +125,7 @@ jobs:
             network=host
             image=moby/buildkit:master
       - name: 'Login to GitHub Container Registry'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/login-action@master
         with:
           registry: ${{ env.GH_REGISTRY }}
@@ -129,7 +134,7 @@ jobs:
           ecr: false
           logout: true
       - name: 'Login to DockerHub Container Registry'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/login-action@master
         with:
           registry: ${{ env.DH_REGISTRY }}
@@ -138,7 +143,7 @@ jobs:
           ecr: false
           logout: true
       - name: 'Clean old containers'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: actions/delete-package-versions@main
         with:
           owner: ${{ github.repository_owner }}
@@ -147,7 +152,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           min-versions-to-keep: 3
       - name: 'Build multi-platforms Docker images'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/build-push-action@master
         with:
           context: .
@@ -167,7 +172,7 @@ jobs:
           no-cache: false
           platforms: linux/amd64,linux/arm64
       - name: 'Load Docker image'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/build-push-action@master
         with:
           context: .
@@ -187,7 +192,7 @@ jobs:
           no-cache: false
           tags: ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }}
       - name: 'Test Docker image'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         shell: bash
         run: |
           echo -ne "ANSIBLE_CLI_VERSION="
@@ -207,7 +212,7 @@ jobs:
           echo -ne "GCLOUD_CLI_VERSION="
           docker container run --entrypoint="/bin/sh" --rm ${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.TEST_TAG }} -c "gcloud version" | awk '/Google Cloud SDK/{print $NF}'
       - name: 'Tag and push multi-platforms Docker images to preconfigured container registries'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' || github.event.inputs.SKIP_VERSION_CHANGE == 'true' }}
         uses: docker/build-push-action@master
         with:
           context: .
@@ -233,11 +238,11 @@ jobs:
             ${{ env.GH_REGISTRY }}/${{ github.repository_owner }}/${{ env.REPOSITORY_NAME }}:${{ env.CONTAINER_TAG }}
           platforms: linux/amd64,linux/arm64
       - name: 'Pull git'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' }}
         run: |
           git pull --rebase
       - name: 'Push git changes'
-        if: ${{ env.CLI_VERSIONS_CHANGED == 1 }}
+        if: ${{ env.CLI_VERSIONS_CHANGED == '1' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_TOKEN }}

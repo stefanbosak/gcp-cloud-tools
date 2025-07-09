@@ -100,7 +100,7 @@ jobs:
           fi
           ./setvariables.sh
           cat /tmp/github_env_tail >> ${GITHUB_ENV}
-          echo "WORKSPACE_ROOT_DIR=${{ github.workspace }}/workspace" >> ${GITHUB_ENV}
+          echo "WORKSPACE_ROOT_DIR=/home/user" >> ${GITHUB_ENV}
           echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> ${GITHUB_ENV}
           echo "/tmp/github_env_tail:"
           cat /tmp/github_env_tail

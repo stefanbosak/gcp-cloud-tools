@@ -1,20 +1,23 @@
-# set location of workspace directory
-# (temporary space within container image)
-ARG WORKSPACE_ROOT_DIR=/tmp/workspace
-
 # user in container
 ARG CONTAINER_USER=user
 ARG CONTAINER_GROUP=user
 
+ARG CONTAINER_USER_ID=1000
+ARG CONTAINER_GROUP_ID=1000
+
+# set location of workspace directory
+# (temporary space within container image)
+ARG WORKSPACE_ROOT_DIR="/home/${CONTAINER_USER}"
+
 # Debian release and options
-ARG DEBIAN_RELEASE=stable-slim
+ARG DEBIAN_RELEASE=testing-slim
 ARG DEBIAN_FRONTEND=noninteractive
 
 # ansible CLI tools versions
-ARG ANSIBLE_CLI_VERSION=2.19.0b4
+ARG ANSIBLE_CLI_VERSION=2.19.0b6
 
 # Helm version
-ARG HELM_CLI_VERSION=v3.18.0
+ARG HELM_CLI_VERSION=v3.18.2
 
 # kubectl version
 ARG K9S_CLI_VERSION=v0.50.6
@@ -26,13 +29,13 @@ ARG KUBECTL_CLI_VERSION=v1.33.1
 ARG KOPS_CLI_VERSION=v1.32.0
 
 # Terraform version
-ARG TERRAFORM_CLI_VERSION=1.12.1
+ARG TERRAFORM_CLI_VERSION=1.12.2
 
 # Terragrunt version
-ARG TERRAGRUNT_CLI_VERSION=v0.80.2
+ARG TERRAGRUNT_CLI_VERSION=v0.81.6
 
 # gcloud CLI version
-ARG GCLOUD_CLI_VERSION=523.0.1
+ARG GCLOUD_CLI_VERSION=526.0.1
 
 # container as builder for preparing GCP cloud tools
 FROM debian:${DEBIAN_RELEASE} AS gcp-cloud-tools-builder
@@ -211,8 +214,15 @@ LABEL stage="gcp-cloud-tools-image" \
       org.opencontainers.image.description="Debian-based container with GCP cloud tools" \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
+# user in container
 ARG CONTAINER_USER
 ARG CONTAINER_GROUP
+
+ARG CONTAINER_USER_ID
+ARG CONTAINER_GROUP_ID
+
+ARG WORKSPACE_ROOT_DIR
+WORKDIR "${WORKSPACE_ROOT_DIR}"
 
 ARG GCLOUD_CLI_VERSION
 
@@ -223,8 +233,16 @@ ENV LANG=C.UTF-8
 ENV TZ=UTC
 
 # setup user profile
-RUN groupadd --gid 1000 ${CONTAINER_USER} && \
-    useradd --gid ${CONTAINER_GROUP} --groups sudo,${CONTAINER_USER} --create-home --uid 1000 ${CONTAINER_USER} && \
+RUN if ! getent passwd ${CONTAINER_USER_ID}; then \
+        groupadd --gid ${CONTAINER_GROUP_ID} "${CONTAINER_GROUP}" && \
+        useradd --gid ${CONTAINER_GROUP_ID} --groups "sudo,${CONTAINER_USER}" -M -d "${WORKSPACE_ROOT_DIR}" --uid ${CONTAINER_USER_ID} "${CONTAINER_USER}" -s "/bin/bash"; \
+    else \
+        rm -fr "/home/${CONTAINER_USER}" && \
+        usermod -M -d "${WORKSPACE_ROOT_DIR}" -c "${CONTAINER_USER}" "debian" && \
+        groupmod -n "${CONTAINER_USER}" "debian" && \
+        usermod -l "${CONTAINER_USER}" "debian" && \
+        chown -R "${CONTAINER_USER}:${CONTAINER_GROUP}" "${WORKSPACE_ROOT_DIR}"; \
+    fi && \
 # SSH client configuration
     mkdir -v "/home/${CONTAINER_USER}/.ssh" && \
     echo "Host *\n" \

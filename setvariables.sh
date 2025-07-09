@@ -23,23 +23,29 @@ source "${cwd}/set_latest_versions_strings.sh"
 export UBUNTU_RELEASES_URI="https://changelogs.ubuntu.com/meta-release"
 
 # Ubuntu LTS releases URI (comment if prefer non-LTS)
-export UBUNTU_RELEASES_URI="${UBUNTU_RELEASES_URI}-lts"
+#export UBUNTU_RELEASES_URI="${UBUNTU_RELEASES_URI}-lts"
 
 # extract last supported Ubuntu LTS release
-export UBUNTU_RELEASE=$(curl -s "${UBUNTU_RELEASES_URI}" | awk '/^Version:/ {if ($2 ~ /^[0-9]{2}\.[0-9]{2}\./) version=substr($2, 1, 5)} /^Supported: 1/ {if (version) print version}' | tail -n 1)
+export UBUNTU_RELEASE=$(curl -s "${UBUNTU_RELEASES_URI}" | awk '/^Version:/ {if ($2 ~ /^[0-9]{2}\.[0-9]{2}/) version=substr($2, 1, 5)} /^Supported: 1/ {if (version) print version}' | tail -n 1)
 
 # default target OS, architecture and platforms
 export TARGETOS=${TARGETOS:-linux}
-export TARGETARCH=${TARGETARCH:-$(dpkg --print-architecture)}
-export TARGETPLATFORM=${TARGETPLATFORM:-"${TARGETOS}/${TARGETARCH}"}
 
-# set location of workspace directory
-# (temporary space within container image)
-export WORKSPACE_ROOT_DIR=${WORKSPACE_ROOT_DIR:-"/tmp/workspace"}
+if [ -f "/etc/debian_version" ]; then
+  export TARGETARCH=${TARGETARCH:-$(dpkg --print-architecture)}
+else
+  export TARGETARCH=${TARGETARCH:-"amd64"}
+fi
+
+export TARGETPLATFORM=${TARGETPLATFORM:-"${TARGETOS}/${TARGETARCH}"}
 
 # container user and group
 export CONTAINER_USER=${CONTAINER_USER:-"user"}
 export CONTAINER_GROUP=${CONTAINER_GROUP:-"user"}
+
+# container user ID and group ID
+export CONTAINER_USER_ID=${CONTAINER_USER_ID:-$(id -u)}
+export CONTAINER_GROUP_ID=${CONTAINER_GROUP_ID:-$(id -g)}
 
 # container name
 export CONTAINER_NAME=${CONTAINER_NAME:-"$(basename ${cwd})"}
@@ -51,7 +57,14 @@ export CONTAINER_IMAGE_NAME=${CONTAINER_IMAGE_NAME:-"${CONTAINER_NAME}"}
 export CONTAINER_IMAGE_TAG=${CONTAINER_TAG:-":initial"}
 
 # it is crutial to have "/" at the end of the string
+# - if empty use local containers
+# - GitHub package container image example: ghcr.io/<organization> or ghcr.io/<owner>/
+# - DockerHub container image example: docker.io/<organization>/
 export CONTAINER_REPOSITORY=${CONTAINER_REPOSITORY:-""}
+
+# set location of workspace directory
+# (temporary space within container image)
+export WORKSPACE_ROOT_DIR=${WORKSPACE_ROOT_DIR:-"/home/${CONTAINER_USER}"}
 
 # docker compose settings
 export COMPOSE_DOCKER_CLI_BUILD=1
@@ -59,10 +72,10 @@ export DOCKER_BUILDKIT=1
 export DOCKER_DEFAULT_PLATFORM="${TARGETPLATFORM}"
 
 # ansible CLI tool version
-export ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION:-2.19.0b4}
+export ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION:-2.19.0b6}
 
 # Helm version
-export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.18.1}
+export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.18.2}
 
 # k9s version
 export K9S_CLI_VERSION=${K9S_CLI_VERSION:-v0.50.6}
@@ -74,13 +87,13 @@ export KOPS_CLI_VERSION=${KOPSL_CLI_VERSION:-v1.32.0}
 export KUBECTL_CLI_VERSION=${KUBECTL_CLI_VERSION:-v1.33.1}
 
 # Terraform version
-export TERRAFORM_CLI_VERSION=${TERRAFORM_CLI_VERSION:-1.12.1}
+export TERRAFORM_CLI_VERSION=${TERRAFORM_CLI_VERSION:-1.12.2}
 
 # Terragrunt version
-export TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION:-v0.80.4}
+export TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION:-v0.81.6}
 
 # gcloud CLI tool version
-export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-524.0.0}
+export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-526.0.1}
 
 # skip changing PUSHED_VERSIONS.txt when called locally from docker*.sh scripts
 if [[ ! "${BASH_SOURCE[1]}" =~ docker.*\.sh ]]; then

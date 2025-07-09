@@ -7,7 +7,7 @@ export ACCOUNT=$(gcloud config get account 2> /dev/null)
 # - empty: user need to go through login procedure
 if [ -z "${ACCOUNT}" ]; then
   # login to GCP
-  gcloud auth login --no-launch-browser
+  gcloud auth login --update-adc --no-launch-browser
 
   # gather account data
   export ACCOUNT=$(gcloud config get account)
@@ -16,25 +16,35 @@ fi
 # organization attributes
 # gcloud organizations list
 # gcloud organizations describe ${ORGANIZATION_ID}
-export ORGANIZATION_ID=
+export ORGANIZATION_NAME=
+
+# ORGANIZATION_NAME is required attribute, if empty terminate
+if [ -z "${ORGANIZATION_NAME}" ]; then
+  echo "ORGANIZATION_NAME is not set, exitting..."
+  exit 1
+fi
+
+export ORGANIZATION_ID=$(gcloud organizations list --format='value(ID)' --filter="display_name=\"${ORGANIZATION_NAME}\"")
 export ORGANIZATION_NUMBER=${ORGANIZATION_ID}
-export ORGANIZATION_NAME=$( gcloud organizations describe "${ORGANIZATION_ID}" --format="json" | jq -r '.displayName')
 
 # project attributes
-# gcloud projects list
-# gcloud config get-value project
+# gcloud projects list --format="table(name,projectId)"
+# gcloud projects describe "${PROJECT_ID}"
+export PROJECT_NAME=
 
-# gcloud projects list --format="table(projectId)"
-export PROJECT_ID=
+# PROJECT_NAME is required attribute, if empty terminate
+if [ -z "${PROJECT_NAME}" ]; then
+  echo "PROJECT_NAME is not set, exitting..."
+  exit 1
+fi
+
+export PROJECT_ID=$(gcloud projects list --filter="name:\"${PROJECT_NAME}\"" --format="value(projectId)")
 
 # PROJECT_ID is required attribute, if empty terminate
 if [ -z "${PROJECT_ID}" ]; then
   echo "PROJECT_ID is not set, exitting..."
   exit 1
 fi
-
-# gcloud projects describe ${PROJECT_ID}
-export PROJECT_NAME=$(gcloud projects describe "${PROJECT_ID}" --format="json(name)" | jq -r .name)
 
 # gcloud projects list --format="table(projectNumber)"
 export PROJECT_NUMBER=$(gcloud projects describe "${PROJECT_ID}" --format="json(projectNumber)" | jq -r .projectNumber)

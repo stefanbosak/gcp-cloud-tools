@@ -43,6 +43,7 @@ if [ ! -z "$(docker image ls --filter "reference=${CONTAINER_REPOSITORY}${CONTAI
                          -v "${cwd}/scripts":"/home/${CONTAINER_USER}/scripts" \
                          --network=host --rm --name "${CONTAINER_NAME}" \
                          --group-add "docker" \
+                         -e SHELL=/usr/bin/bash \
                          "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}"
   else
     # when any argument recognized only execute requested application/command inside container (oneshot action)
@@ -52,6 +53,7 @@ if [ ! -z "$(docker image ls --filter "reference=${CONTAINER_REPOSITORY}${CONTAI
                          -v "${cwd}/scripts":"/home/${CONTAINER_USER}/scripts" \
                          --network=host --rm --name "${CONTAINER_NAME}" \
                          --group-add "docker" \
+                         -e SHELL=/usr/bin/bash \
                          "${CONTAINER_REPOSITORY}${CONTAINER_IMAGE_NAME}${CONTAINER_IMAGE_TAG}" \
                          -c "${*}"
   fi

@@ -285,6 +285,8 @@ RUN chown -vR ${CONTAINER_USER}:${CONTAINER_GROUP} "/home/${CONTAINER_USER}" && 
 # update plocate database
     updatedb && \
 # enable tools completions (not required to run any tool)
+    cp /etc/skel/.bashrc "${WORKSPACE_ROOT_DIR}" && \
+    cp /etc/skel/.profile "${WORKSPACE_ROOT_DIR}" && \
     echo "complete -C terraform terraform" > "/usr/share/bash-completion/completions/terraform" && \
     echo "complete -C terragrunt terragrunt" > "/usr/share/bash-completion/completions/terragrunt"
 

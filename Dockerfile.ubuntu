@@ -100,7 +100,7 @@ RUN mkdir -v "${WORKSPACE_ROOT_DIR}/helm" && tar -zxf "helm-${HELM_CLI_VERSION}-
 # container as builder for preparing GCP cloud tools
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-kops-builder
 
-LABEL stage="gcp-cloud-tools-kubectl-builder" \
+LABEL stage="gcp-cloud-tools-kops-builder" \
       description="Ubuntu-based container builder for preparing GCP cloud tool kops CLI" \
       org.opencontainers.image.description="Ubuntu-based container builder for preparing GCP cloud tool kops CLI" \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
@@ -285,8 +285,9 @@ RUN chown -vR ${CONTAINER_USER}:${CONTAINER_GROUP} "/home/${CONTAINER_USER}" && 
 # update plocate database
     updatedb && \
 # enable tools completions (not required to run any tool)
-    cp /etc/skel/.bashrc "${WORKSPACE_ROOT_DIR}" && \
-    cp /etc/skel/.profile "${WORKSPACE_ROOT_DIR}" && \
+    cp "/etc/skel/.bashrc" "/root" && \
+    cp "/etc/skel/.bashrc" "${WORKSPACE_ROOT_DIR}" && \
+    cp "/etc/skel/.profile" "${WORKSPACE_ROOT_DIR}" && \
     echo "complete -C terraform terraform" > "/usr/share/bash-completion/completions/terraform" && \
     echo "complete -C terragrunt terragrunt" > "/usr/share/bash-completion/completions/terragrunt"
 
@@ -318,6 +319,9 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     helm completion bash > "/usr/share/bash-completion/completions/helm" && \
     kops completion bash > "/usr/share/bash-completion/completions/kops" && \
     kubectl completion bash > "/usr/share/bash-completion/completions/kubectl" && \
+    cp "/usr/share/bash-completion/completions/kubectl" "/usr/share/bash-completion/completions/k" && \
+    sed -i 's/kubectl/k/g' "/usr/share/bash-completion/completions/k" && \
+    ln -s /usr/local/bin/kubectl /usr/local/bin/k && \
     k9s completion bash > "/usr/share/bash-completion/completions/k9s" && \
     activate-global-python-argcomplete && \
 # DiD (Docker in Docker)
@@ -327,7 +331,25 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     if ! getent group docker > /dev/null 2>&1; then \
       groupadd docker; \
     fi && \
-    usermod -aG docker "${CONTAINER_USER}"
+    usermod -aG docker "${CONTAINER_USER}" && \
+    sed -i 's/ulimit -Hn 524288/#ulimit -Hn 524288/' /etc/init.d/docker && \
+# install kubectl CNPG plugin
+    curl -sSfL https://github.com/cloudnative-pg/cloudnative-pg/raw/main/hack/install-cnpg-plugin.sh | \
+    sh -s -- -b /usr/local/bin && \
+    ln -s /usr/local/bin/kubectl-cnpg /usr/local/bin/cnpgctl && \
+    cnpgctl completion bash > /usr/share/bash-completion/completions/kubectl-cnpg && \
+# install kubectl RabbitMQ plugin
+    curl -sSfL https://raw.githubusercontent.com/rabbitmq/cluster-operator/refs/heads/main/bin/kubectl-rabbitmq > /usr/local/bin/kubectl-rabbitmq && \
+    chmod a+x /usr/local/bin/kubectl-rabbitmq && \
+    ln -s /usr/local/bin/kubectl-rabbitmq /usr/local/bin/rmqctl
+
+# install kubectl cert-manager plugin
+SHELL ["/bin/bash", "-c"]
+RUN export CMCTL_VERSION=$(git ls-remote --refs --sort='version:refname' --tags "https://github.com/cert-manager/cmctl" | awk -F"/" '!($0 ~ /alpha|beta|rc|dev|nightly|\{/){print $NF}' | tail -n 1) && \
+    wget https://github.com/cert-manager/cmctl/releases/download/${CMCTL_VERSION}/cmctl_linux_amd64 -O /usr/local/bin/kubectl-cert_manager && \
+    chmod a+x /usr/local/bin/kubectl-cert_manager && \
+    ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
+    cmctl completion bash > /usr/share/bash-completion/completions/cmctl
 
 # user home directory as workdir
 WORKDIR "/home/${CONTAINER_USER}"

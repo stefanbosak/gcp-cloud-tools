@@ -72,28 +72,28 @@ export DOCKER_BUILDKIT=1
 export DOCKER_DEFAULT_PLATFORM="${TARGETPLATFORM}"
 
 # ansible CLI tool version
-export ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION:-2.19.0b6}
+export ANSIBLE_CLI_VERSION=${ANSIBLE_CLI_VERSION:-2.19.0b7}
 
 # Helm version
-export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.18.2}
+export HELM_CLI_VERSION=${HELM_CLI_VERSION:-v3.18.4}
 
 # k9s version
-export K9S_CLI_VERSION=${K9S_CLI_VERSION:-v0.50.6}
+export K9S_CLI_VERSION=${K9S_CLI_VERSION:-v0.50.9}
 
 # kops version
 export KOPS_CLI_VERSION=${KOPSL_CLI_VERSION:-v1.32.0}
 
 # kubectl version
-export KUBECTL_CLI_VERSION=${KUBECTL_CLI_VERSION:-v1.33.1}
+export KUBECTL_CLI_VERSION=${KUBECTL_CLI_VERSION:-v1.33.3}
 
 # Terraform version
 export TERRAFORM_CLI_VERSION=${TERRAFORM_CLI_VERSION:-1.12.2}
 
 # Terragrunt version
-export TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION:-v0.81.6}
+export TERRAGRUNT_CLI_VERSION=${TERRAGRUNT_CLI_VERSION:-v0.83.2}
 
 # gcloud CLI tool version
-export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-526.0.1}
+export GCLOUD_CLI_VERSION=${GCLOUD_CLI_VERSION:-530.0.0}
 
 # skip changing PUSHED_VERSIONS.txt when called locally from docker*.sh scripts
 if [[ ! "${BASH_SOURCE[1]}" =~ docker.*\.sh ]]; then

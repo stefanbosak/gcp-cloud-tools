@@ -337,7 +337,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     curl -sSfL https://github.com/cloudnative-pg/cloudnative-pg/raw/main/hack/install-cnpg-plugin.sh | \
     sh -s -- -b /usr/local/bin && \
     ln -s /usr/local/bin/kubectl-cnpg /usr/local/bin/cnpgctl && \
-    cnpgctl completion bash > /usr/share/bash-completion/completions/kubectl-cnpg && \
+    cnpgctl completion bash > /usr/share/bash-completion/completions/cnpgctl && \
+    sed -i 's/kubectl-cnpg/cnpgctl/g' /usr/share/bash-completion/completions/cnpgctl && \
 # install kubectl RabbitMQ plugin
     curl -sSfL https://raw.githubusercontent.com/rabbitmq/cluster-operator/refs/heads/main/bin/kubectl-rabbitmq > /usr/local/bin/kubectl-rabbitmq && \
     chmod a+x /usr/local/bin/kubectl-rabbitmq && \

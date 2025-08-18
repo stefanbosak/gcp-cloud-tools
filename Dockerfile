@@ -10,7 +10,7 @@ ARG CONTAINER_GROUP_ID=1000
 ARG WORKSPACE_ROOT_DIR="/home/${CONTAINER_USER}"
 
 # Debian release and options
-ARG DEBIAN_RELEASE=testing-slim
+ARG DEBIAN_RELEASE=stable-slim
 ARG DEBIAN_FRONTEND=noninteractive
 
 # ansible CLI tools versions

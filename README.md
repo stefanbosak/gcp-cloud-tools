@@ -32,7 +32,7 @@ __shared scripts:__
 ### Zero effort approach
 GitHub Actions workflow file is covering all necessary activities which are fully automated in GitHub (re-using Docker container approach as base for automation):
 - gathering and propagating latest available tools versions to Docker preparation process
-- setting up of QEMU emulator (support for multi-platform images)
+- setting up of QEMU emulator (support for multi platform images)
 - setting up of Docker builder
 - building Docker image
 - testing of created Docker image

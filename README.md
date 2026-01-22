@@ -63,6 +63,7 @@ __supported platforms (OS/architecture):__
 
 Pull images from following container registries (platform is recognized and selected automatically):
 - [GitHubCR](https://github.com/stefanbosak/gcp-cloud-tools/pkgs/container/gcp-cloud-tools) (IPv4 only): `docker pull ghcr.io/stefanbosak/gcp-cloud-tools:initial`
+- [DockerHubCR](https://hub.docker.com/r/developmententity/gcp-cloud-tools) (IPv4 & IPv6): `docker pull developmententity/gcp-cloud-tools:initial`
 
 ### Docker container approach
 Docker build wrapper script is covering creation of container

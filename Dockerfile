@@ -338,15 +338,15 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     sh -s -- -b /usr/local/bin && \
     ln -s /usr/local/bin/kubectl-cnpg /usr/local/bin/cnpgctl && \
     cnpgctl completion bash > /usr/share/bash-completion/completions/cnpgctl && \
-    sed -i 's/kubectl-cnpg/cnpgctl/g' /usr/share/bash-completion/completions/cnpgctl && \
-# install kubectl RabbitMQ plugin
-    curl -sSfL https://raw.githubusercontent.com/rabbitmq/cluster-operator/refs/heads/main/bin/kubectl-rabbitmq > /usr/local/bin/kubectl-rabbitmq && \
-    chmod a+x /usr/local/bin/kubectl-rabbitmq && \
-    ln -s /usr/local/bin/kubectl-rabbitmq /usr/local/bin/rmqctl
+    sed -i 's/kubectl-cnpg/cnpgctl/g' /usr/share/bash-completion/completions/cnpgctl
 
-# install kubectl cert-manager plugin
+# install kubectl RabbitMQ, cert-manager plugin
 SHELL ["/bin/bash", "-c"]
-RUN export CMCTL_VERSION=$(git ls-remote --refs --sort='version:refname' --tags "https://github.com/cert-manager/cmctl" | awk -F"/" '!($0 ~ /alpha|beta|rc|dev|nightly|\{/){print $NF}' | tail -n 1) && \
+RUN export RABBITMQ_VERSION=$(git ls-remote --refs --sort='version:refname' --tags "https://github.com/rabbitmq/cluster-operator" | awk -F"/" '!($0 ~ /alpha|beta|rc|dev|nightly|\{/){print $NF}' | tail -n 1) && \
+    curl -sSfL https://raw.githubusercontent.com/rabbitmq/cluster-operator/refs/tags/${RABBITMQ_VERSION}/bin/kubectl-rabbitmq > /usr/local/bin/kubectl-rabbitmq && \
+    chmod a+x /usr/local/bin/kubectl-rabbitmq && \
+    ln -s /usr/local/bin/kubectl-rabbitmq /usr/local/bin/rmqctl && \
+    export CMCTL_VERSION=$(git ls-remote --refs --sort='version:refname' --tags "https://github.com/cert-manager/cmctl" | awk -F"/" '!($0 ~ /alpha|beta|rc|dev|nightly|\{/){print $NF}' | tail -n 1) && \
     wget https://github.com/cert-manager/cmctl/releases/download/${CMCTL_VERSION}/cmctl_linux_amd64 -O /usr/local/bin/kubectl-cert_manager && \
     chmod a+x /usr/local/bin/kubectl-cert_manager && \
     ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \

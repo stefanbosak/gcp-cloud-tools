@@ -38,6 +38,7 @@ done
 
 # build docker image
 docker buildx build --network=host --force-rm --rm \
+                    --provenance=false --sbom=false --no-cache \
                     --platform "${TARGETPLATFORM}" \
                     --build-arg TARGETOS="${TARGETOS}" \
                     --build-arg ANSIBLE_CLI_VERSION="${ANSIBLE_CLI_VERSION}" \

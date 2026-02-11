@@ -43,6 +43,7 @@ FROM debian:${DEBIAN_RELEASE} AS gcp-cloud-tools-builder
 LABEL stage="gcp-cloud-tools-builder" \
       description="Debian-based container builder for preparing GCP cloud tools" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tools" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG DEBIAN_FRONTEND
@@ -61,6 +62,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-ansible-cli-builder
 LABEL stage="gcp-cloud-tools-ansible-cli-builder" \
       description="Debian-based container builder for preparing GCP cloud tool ansible" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool ansible" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -81,6 +83,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-helm-builder
 LABEL stage="gcp-cloud-tools-helm-builder" \
       description="Debian-based container builder for preparing GCP cloud tool HELM CLI" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool HELM CLI" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -103,6 +106,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-kops-builder
 LABEL stage="gcp-cloud-tools-kops-builder" \
       description="Debian-based container builder for preparing GCP cloud tool kops CLI" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool kops CLI" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -125,6 +129,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-kubectl-builder
 LABEL stage="gcp-cloud-tools-kubectl-builder" \
       description="Debian-based container builder for preparing GCP cloud tool kubectl CLI" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool kubectl CLI" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -147,6 +152,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-k9s-builder
 LABEL stage="gcp-cloud-tools-k9s-builder" \
       description="Debian-based container builder for preparing GCP cloud tool k9s CLI" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool k9s CLI" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -168,6 +174,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-terraform-builder
 LABEL stage="gcp-cloud-tools-terraform-builder" \
       description="Debian-based container builder for preparing GCP cloud tool terraform" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool terraform" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -190,6 +197,7 @@ FROM gcp-cloud-tools-builder AS gcp-cloud-tools-terragrunt-builder
 LABEL stage="gcp-cloud-tools-kubectl-builder" \
       description="Debian-based container builder for preparing GCP cloud tool terragrunt CLI" \
       org.opencontainers.image.description="Debian-based container builder for preparing GCP cloud tool terragrunt CLI" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 ARG TARGETOS
@@ -212,6 +220,7 @@ FROM debian:${DEBIAN_RELEASE} AS gcp-cloud-tools-image
 LABEL stage="gcp-cloud-tools-image" \
       description="Debian-based container with GCP cloud tools" \
       org.opencontainers.image.description="Debian-based container with GCP cloud tools" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
       org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
 
 # user in container
@@ -342,7 +351,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
 
 # install kubectl RabbitMQ, cert-manager plugin
 SHELL ["/bin/bash", "-c"]
-RUN export RABBITMQ_VERSION=$(git ls-remote --refs --sort='version:refname' --tags "https://github.com/rabbitmq/cluster-operator" | awk -F"/" '!($0 ~ /alpha|beta|rc|dev|nightly|\{/){print $NF}' | tail -n 1) && \
+RUN export RABBITMQ_VERSION=v2.19.0 && \
     curl -sSfL https://raw.githubusercontent.com/rabbitmq/cluster-operator/refs/tags/${RABBITMQ_VERSION}/bin/kubectl-rabbitmq > /usr/local/bin/kubectl-rabbitmq && \
     chmod a+x /usr/local/bin/kubectl-rabbitmq && \
     ln -s /usr/local/bin/kubectl-rabbitmq /usr/local/bin/rmqctl && \

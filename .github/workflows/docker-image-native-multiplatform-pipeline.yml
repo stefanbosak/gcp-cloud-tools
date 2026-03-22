@@ -351,49 +351,49 @@ jobs:
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(ansible --version | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "ANSIBLE_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(helm version --short | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "HELM_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(k9s version | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "K9S_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(kops version | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "KOPS_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(kubectl version --client | grep Client | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "KUBECTL_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(terrafor version | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "TERRAFORM_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(terragrunt version | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "TERRAGRUNT_CLI_VERSION=${v}";'
 
           docker run --rm \
             -v /dev:/dev \
             -u root \
-            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }} \
+            ${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }} \
             sh -c 'v=$(gcloud version | grep "Google Cloud SDK" | grep -oP "\d+\.\d+\.\d+(-\d+)?"); echo "ANSIBLE_CLI_VERSION=${v}";'
 
   scan:
@@ -414,7 +414,7 @@ jobs:
       - name: 'Run Trivy scan'
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.build.outputs.REPOSITORY_NAME }}:${{ needs.build.outputs.CONTAINER_TAG }}'
+          image-ref: '${{ env.DH_REGISTRY }}/${{ secrets.DH_USER }}/${{ needs.prepare.outputs.REPOSITORY_NAME }}:${{ needs.prepare.outputs.CONTAINER_TAG }}'
           format: 'json'
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'

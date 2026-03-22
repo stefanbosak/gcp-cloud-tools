@@ -398,7 +398,7 @@ jobs:
 
   scan:
     name: 'Scan multi-platform Docker images'
-    needs: [build, test]
+    needs: [prepare, merge, test]
     if: success()
     runs-on: ${{ matrix.runner }}
     strategy:

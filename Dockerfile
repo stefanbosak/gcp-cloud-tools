@@ -289,6 +289,22 @@ ADD "https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_C
 RUN mkdir -p "/usr/local/bin/" && install -v -o root -g root -m 0755 "${WORKSPACE_ROOT_DIR}/terragrunt_${TARGETOS}_${TARGETARCH}" "/usr/local/bin/terragrunt"
 
 
+FROM scratch AS gcp-cloud-tools-binaries-aggregator
+
+# transfer tools from builders
+COPY --from=gcp-cloud-tools-ansible-cli-builder "/usr/local/bin" "/usr/local/bin"
+COPY --from=gcp-cloud-tools-ansible-cli-builder "/usr/local/lib/" "/usr/local/lib"
+COPY --from=gcp-cloud-tools-cm-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-cnpg-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-helm-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-k9s-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-kops-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-kubectl-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-kustomize-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-terraform-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-terragrunt-builder "/usr/local/bin/" "/usr/local/bin/"
+
+
 # container as final image for providing GCP cloud tools
 FROM dhi.io/debian-base:${DEBIAN_RELEASE} AS gcp-cloud-tools-image
 
@@ -350,27 +366,11 @@ RUN mkdir -p "/usr/local/bin/" && \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-# copy Google Cloud Platform helper scripts into user profile inside container image
-COPY ./scripts "${WORKSPACE_ROOT_DIR}/scripts"
-
-# transfer tools from builders
-COPY --from=gcp-cloud-tools-ansible-cli-builder "/usr/local/bin" "/usr/local/bin"
-COPY --from=gcp-cloud-tools-ansible-cli-builder "/usr/local/lib/" "/usr/local/lib"
-COPY --from=gcp-cloud-tools-cm-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-cnpg-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-helm-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-k9s-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-kops-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-kubectl-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-kustomize-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-terraform-builder "/usr/local/bin/" "/usr/local/bin/"
-COPY --from=gcp-cloud-tools-terragrunt-builder "/usr/local/bin/" "/usr/local/bin/"
-
 # install gcloud CLI tooling
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
     tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
     gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && \
-    apt-get install -y \
+    apt-get -y --no-install-recommends install \
       google-cloud-cli=${GCLOUD_CLI_VERSION}-0 \
       google-cloud-cli-gke-gcloud-auth-plugin=${GCLOUD_CLI_VERSION}-0 \
       google-cloud-cli-kpt=${GCLOUD_CLI_VERSION}-0 \
@@ -391,6 +391,9 @@ RUN curl -fsSL https://test.docker.com | sh && \
     if ! getent group docker > /dev/null 2>&1; then \
       groupadd docker; \
     fi
+
+# copy tools from aggregator
+COPY --from=gcp-cloud-tools-binaries-aggregator / /
 
 # setup user and group
 RUN if getent group "${CONTAINER_GROUP_ID}" > /dev/null; then \
@@ -419,10 +422,9 @@ RUN if getent group "${CONTAINER_GROUP_ID}" > /dev/null; then \
            "${CONTAINER_USER}"; \
        fi \
     && chown -R "${CONTAINER_USER}:${CONTAINER_GROUP}" "${HOME_ROOT_DIR}" \
-    && usermod -aG docker "${CONTAINER_USER}"
-
+    && usermod -aG docker "${CONTAINER_USER}" && \
 # enable tools completions (required to run given tool to generate completion file content)
-RUN ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
+    ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
     cmctl completion bash > /usr/share/bash-completion/completions/cmctl && \
     ln -s /usr/local/bin/kubectl-cnpg /usr/local/bin/cnpgctl && \
     cnpgctl completion bash > /usr/share/bash-completion/completions/cnpgctl && \
@@ -438,6 +440,9 @@ RUN ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
     echo "complete -C terraform terraform" > "/usr/share/bash-completion/completions/terraform" && \
     echo "complete -C terragrunt terragrunt" > "/usr/share/bash-completion/completions/terragrunt" && \
     activate-global-python-argcomplete
+
+# copy Google Cloud Platform helper scripts into user profile inside container image
+COPY ./scripts "${WORKSPACE_ROOT_DIR}/scripts"
 
 # container user and group
 USER "${CONTAINER_USER}:${CONTAINER_GROUP}"

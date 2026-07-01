@@ -25,9 +25,9 @@
 | **Kubectl** | [`v1.37.0-alpha.2`](https://github.com/kubernetes/kubernetes/releases/tag/v1.37.0-alpha.2) |
 | **Kustomize** | [`5.8.1`](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize/v5.8.1) |
 | **Terraform** | [`1.16.0-alpha20260626`](https://github.com/hashicorp/terraform/releases/tag/v1.16.0-alpha20260626) |
-| **Terragrunt** | [`v1.1.0-rc3`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.0-rc3) |
+| **Terragrunt** | [`v1.1.0`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.0) |
 
-> 🔄 Last updated: 2026-06-29T17:55:34+02:00 · [Build #64](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/28495857750)
+> 🔄 Last updated: 2026-07-01T07:39:27+02:00 · [Build #65](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/28506311515)
 <!-- VERSION_INFO_END -->
 
 ---

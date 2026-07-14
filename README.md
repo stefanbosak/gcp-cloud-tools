@@ -16,7 +16,7 @@
 <!-- VERSION_INFO_START -->
 | Component | Version |
 |-----------|---------|
-| **Ansible** | [`v2.21.2rc1`](https://github.com/ansible/ansible/releases/tag/v2.21.2rc1) |
+| **Ansible** | [`v2.21.2`](https://github.com/ansible/ansible/releases/tag/v2.21.2) |
 | **cert-manager CLI** | [`v2.5.0`](https://github.com/cert-manager/cmctl/releases/tag/v2.5.0) |
 | **GCP CLI** | [`575.0.1`](https://cloud.google.com/sdk/docs/release-notes) |
 | **Helm** | [`v4.2.3`](https://github.com/helm/helm/releases/tag/v4.2.3) |
@@ -25,9 +25,9 @@
 | **Kubectl** | [`v1.37.0-alpha.3`](https://github.com/kubernetes/kubernetes/releases/tag/v1.37.0-alpha.3) |
 | **Kustomize** | [`5.8.1`](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize/v5.8.1) |
 | **Terraform** | [`1.15.8`](https://github.com/hashicorp/terraform/releases/tag/v1.15.8) |
-| **Terragrunt** | [`v1.1.0`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.0) |
+| **Terragrunt** | [`v1.1.1`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.1) |
 
-> 🔄 Last updated: 2026-07-12T23:33:00+02:00 · [Build #75](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/29209888612)
+> 🔄 Last updated: 2026-07-12T23:56:18+02:00 · [Build #77](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/29341387905)
 <!-- VERSION_INFO_END -->
 
 ---

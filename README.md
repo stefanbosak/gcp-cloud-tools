@@ -27,7 +27,7 @@
 | **Terraform** | [`1.16.0-alpha20260715`](https://github.com/hashicorp/terraform/releases/tag/v1.16.0-alpha20260715) |
 | **Terragrunt** | [`v1.1.1`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.1) |
 
-> 🔄 Last updated: 2026-07-17T02:32:19+02:00 · [Build #85](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/29711125901)
+> 🔄 Last updated: 2026-07-20T13:23:33+02:00 · [Build #86](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/29740498897)
 <!-- VERSION_INFO_END -->
 
 ---

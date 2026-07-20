@@ -37,6 +37,9 @@ ARG KUBECTL_CLI_VERSION=v1.36.2
 # Kustomize version
 ARG KUSTOMIZE_CLI_VERSION=5.8.1
 
+# SwarmCLI version
+ARG SWARM_CLI_VERSION=v1.12.0
+
 # Terraform version
 ARG TERRAFORM_CLI_VERSION=1.16.0-alpha20260617
 
@@ -243,6 +246,28 @@ ADD "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v$
 RUN mkdir -p "/usr/local/bin/" && tar -xvf "${WORKSPACE_ROOT_DIR}/kustomize_v${KUSTOMIZE_CLI_VERSION}_${TARGETOS}_${TARGETARCH}.tar.gz" -C "/usr/local/bin" --no-anchored "kustomize"
 
 
+# container as builder for preparing gcp cloud tools
+FROM gcp-cloud-tools-builder AS gcp-cloud-tools-swarmcli-builder
+
+LABEL stage="gcp-cloud-tools-swarmcli-builder" \
+      description="Debian-based container builder for preparing gcp cloud tool SwarmCLI" \
+      org.opencontainers.image.description="Debian-based container builder for preparing gcp cloud tool SwarmCLI" \
+      org.opencontainers.image.url=https://github.com/stefanbosak/gcp-cloud-tools \
+      org.opencontainers.image.source=https://github.com/stefanbosak/gcp-cloud-tools
+
+ARG TARGETOS
+ARG TARGETARCH
+ARG SWARM_CLI_VERSION
+
+ARG WORKSPACE_ROOT_DIR
+WORKDIR "${WORKSPACE_ROOT_DIR}"
+
+# install SwarmCLI
+RUN mkdir -p "/usr/local/bin/" && \
+    curl -fsSL https://swarmcli.io/install.sh | \
+    sh -s -- ce /usr/local/bin "${SWARM_CLI_VERSION}"
+
+
 # container as builder for preparing GCP cloud tools
 FROM gcp-cloud-tools-builder AS gcp-cloud-tools-terraform-builder
 
@@ -301,6 +326,7 @@ COPY --from=gcp-cloud-tools-k9s-builder "/usr/local/bin/" "/usr/local/bin/"
 COPY --from=gcp-cloud-tools-kops-builder "/usr/local/bin/" "/usr/local/bin/"
 COPY --from=gcp-cloud-tools-kubectl-builder "/usr/local/bin/" "/usr/local/bin/"
 COPY --from=gcp-cloud-tools-kustomize-builder "/usr/local/bin/" "/usr/local/bin/"
+COPY --from=gcp-cloud-tools-swarmcli-builder "/usr/local/bin/" "/usr/local/bin/"
 COPY --from=gcp-cloud-tools-terraform-builder "/usr/local/bin/" "/usr/local/bin/"
 COPY --from=gcp-cloud-tools-terragrunt-builder "/usr/local/bin/" "/usr/local/bin/"
 

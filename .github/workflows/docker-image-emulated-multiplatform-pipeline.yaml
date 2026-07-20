@@ -428,7 +428,7 @@ jobs:
             -v /dev:/dev \
             -u root \
             "${IMAGE}" \
-            sh -c "swarmcli version | grep -oP '\d+\.\d+\.\d+'")
+            sh -c "swarmcli version")
           echo "SWARM_CLI_VERSION=${SWARM_CLI_VERSION#v}"
 
           TERRAFORM_CLI_VERSION=$(docker run --rm \

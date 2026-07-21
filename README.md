@@ -24,11 +24,11 @@
 | **Kops** | [`v1.36.0`](https://github.com/kubernetes/kops/releases/tag/v1.36.0) |
 | **Kubectl** | [`v1.37.0-beta.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.37.0-beta.0) |
 | **Kustomize** | [`5.8.1`](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize/v5.8.1) |
-| **SwarmCLI** | [`v1.13.0-rc3`](https://github.com/Eldara-Tech/swarmcli/releases/tag/v1.13.0-rc3) |
+| **SwarmCLI** | [`v1.13.0-rc4`](https://github.com/Eldara-Tech/swarmcli/releases/tag/v1.13.0-rc4) |
 | **Terraform** | [`1.16.0-alpha20260715`](https://github.com/hashicorp/terraform/releases/tag/v1.16.0-alpha20260715) |
 | **Terragrunt** | [`v1.1.1`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.1) |
 
-> 🔄 Last updated: 2026-07-21T16:54:18+02:00 · [Build #92](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/29849585487)
+> 🔄 Last updated: 2026-07-21T22:34:22+02:00 · [Build #93](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/29866485730)
 <!-- VERSION_INFO_END -->
 
 ---

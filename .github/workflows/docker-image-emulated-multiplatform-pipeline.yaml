@@ -26,7 +26,7 @@ on:
         description: 'GCLOUD_CLI_VERSION'
         required: false
         type: string
-        default: '576.0.0'
+        default: '577.0.0'
       HELM_CLI_VERSION:
         description: 'HELM_CLI_VERSION'
         required: false

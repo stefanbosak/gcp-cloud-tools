@@ -29,7 +29,7 @@
 | **Terragrunt** | [`v1.1.2`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.2) |
 | **OpenTofu** | [`1.12.5`](https://github.com/opentofu/opentofu/releases/tag/v1.12.5) |
 
-> 🔄 Last updated: 2026-08-05T22:59:02+02:00 · [Build #126](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/31102921222)
+> 🔄 Last updated: 2026-08-06T14:51:13+02:00 · [Build #127](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/31143625400)
 <!-- VERSION_INFO_END -->
 
 ---

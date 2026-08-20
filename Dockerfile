@@ -447,11 +447,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
 # install DiD (Docker in Docker)
 # - DinD via QEMU on ARM64 is not supported
 #   (ARM64 requires ARM64 kernel from host system which is not present on AMD64 host)
-RUN curl -fsSL https://test.docker.com | sh && \
-    if ! getent group docker > /dev/null 2>&1; then \
-      groupadd docker; \
-    fi
-
+RUN curl -fsSL https://test.docker.com | sh; \
+    getent group docker >/dev/null 2>&1 || groupadd --system docker
 # copy tools from aggregator
 COPY --from=gcp-cloud-tools-binaries-aggregator / /
 
@@ -482,7 +479,9 @@ RUN if getent group "${CONTAINER_GROUP_ID}" > /dev/null; then \
            "${CONTAINER_USER}"; \
        fi \
     && chown -R "${CONTAINER_USER}:${CONTAINER_GROUP}" "${HOME_ROOT_DIR}" \
-    && usermod -aG docker "${CONTAINER_USER}" && \
+    && if getent group docker > /dev/null 2>&1; then \
+         usermod -aG docker "${CONTAINER_USER}"; \
+       fi && \
 # enable tools completions (required to run given tool to generate completion file content)
     ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
     cmctl completion bash > /usr/share/bash-completion/completions/cmctl && \

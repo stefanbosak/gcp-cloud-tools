@@ -418,29 +418,6 @@ RUN mkdir -p "/usr/local/bin/" && \
       wget \
       whois
 
-# install gcloud CLI tooling
-# (Debian's cloud-sdk apt repo has no Alpine equivalent, so pull the official
-# platform-independent tarball and enable the extra components via `gcloud components install`)
-RUN case "${TARGETARCH}" in \
-      amd64) _gcloud_arch="x86_64" ;; \
-      arm64) _gcloud_arch="arm" ;; \
-      *) echo "unsupported TARGETARCH: ${TARGETARCH}" >&2 && exit 1 ;; \
-    esac && \
-    curl -fsSL -o /tmp/google-cloud-cli.tar.gz \
-      "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${GCLOUD_CLI_VERSION}-linux-${_gcloud_arch}.tar.gz" && \
-    tar -xzf /tmp/google-cloud-cli.tar.gz -C /opt && \
-    rm -f /tmp/google-cloud-cli.tar.gz && \
-    /opt/google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --bash-completion=false --quiet && \
-    /opt/google-cloud-sdk/bin/gcloud components install --quiet \
-      gke-gcloud-auth-plugin \
-      kpt \
-      skaffold \
-      docker-credential-gcr && \
-    for _bin in /opt/google-cloud-sdk/bin/*; do ln -sf "${_bin}" "/usr/local/bin/$(basename "${_bin}")"; done
-
-# copy tools from aggregator
-COPY --from=gcp-cloud-tools-binaries-aggregator / /
-
 # setup user and group
 RUN if getent group "${CONTAINER_GROUP_ID}" > /dev/null; then \
       _existing_group="$(getent group "${CONTAINER_GROUP_ID}" | cut -d: -f1)"; \
@@ -468,9 +445,36 @@ RUN if getent group "${CONTAINER_GROUP_ID}" > /dev/null; then \
            "${CONTAINER_USER}"; \
        fi \
     && chown -R "${CONTAINER_USER}:${CONTAINER_GROUP}" "${HOME_ROOT_DIR}" \
-    && usermod -aG docker "${CONTAINER_USER}" && \
+    && getent group docker >/dev/null 2>&1 || groupadd --system docker \
+    && if getent group docker > /dev/null 2>&1; then \
+         usermod -aG docker "${CONTAINER_USER}"; \
+       fi
+
+# install gcloud CLI tooling
+# (Debian's cloud-sdk apt repo has no Alpine equivalent, so pull the official
+# platform-independent tarball and enable the extra components via `gcloud components install`)
+RUN case "${TARGETARCH}" in \
+      amd64) _gcloud_arch="x86_64" ;; \
+      arm64) _gcloud_arch="arm" ;; \
+      *) echo "unsupported TARGETARCH: ${TARGETARCH}" >&2 && exit 1 ;; \
+    esac && \
+    curl -fsSL -o /tmp/google-cloud-cli.tar.gz \
+      "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${GCLOUD_CLI_VERSION}-linux-${_gcloud_arch}.tar.gz" && \
+    tar -xzf /tmp/google-cloud-cli.tar.gz -C /opt && \
+    rm -f /tmp/google-cloud-cli.tar.gz && \
+    /opt/google-cloud-sdk/install.sh --usage-reporting=false --path-update=false --bash-completion=false --quiet && \
+    /opt/google-cloud-sdk/bin/gcloud components install --quiet \
+      gke-gcloud-auth-plugin \
+      kpt \
+      skaffold \
+      docker-credential-gcr && \
+    for _bin in /opt/google-cloud-sdk/bin/*; do ln -sf "${_bin}" "/usr/local/bin/$(basename "${_bin}")"; done
+
+# copy tools from aggregator
+COPY --from=gcp-cloud-tools-binaries-aggregator / /
+
 # enable tools completions (required to run given tool to generate completion file content)
-    ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
+RUN ln -s /usr/local/bin/kubectl-cert_manager /usr/local/bin/cmctl && \
     cmctl completion bash > /usr/share/bash-completion/completions/cmctl && \
     ln -s /usr/local/bin/kubectl-cnpg /usr/local/bin/cnpgctl && \
     cnpgctl completion bash > /usr/share/bash-completion/completions/cnpgctl && \

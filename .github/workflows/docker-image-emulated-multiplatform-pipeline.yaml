@@ -46,7 +46,7 @@ on:
         description: 'KUBECTL_CLI_VERSION'
         required: false
         type: string
-        default: 'v1.36.4'
+        default: 'v1.37.0'
       KUSTOMIZE_CLI_VERSION:
         description: 'KUSTOMIZE_CLI_VERSION'
         required: false
@@ -61,7 +61,7 @@ on:
         description: 'TERRAFORM_CLI_VERSION'
         required: false
         type: string
-        default: '1.15.9'
+        default: '1.17.0-alpha20260827'
       TERRAGRUNT_CLI_VERSION:
         description: 'TERRAGRUNT_CLI_VERSION'
         required: false

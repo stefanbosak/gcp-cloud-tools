@@ -16,7 +16,7 @@ on:
         description: 'ANSIBLE_CLI_VERSION'
         required: false
         type: string
-        default: 'v2.21.3'
+        default: 'v2.21.4rc1'
       CM_CTL_CLI_VERSION:
         description: 'CM_CTL_CLI_VERSION'
         required: false
@@ -26,12 +26,12 @@ on:
         description: 'GCLOUD_CLI_VERSION'
         required: false
         type: string
-        default: '582.0.0'
+        default: '583.0.0'
       HELM_CLI_VERSION:
         description: 'HELM_CLI_VERSION'
         required: false
         type: string
-        default: 'v4.2.4'
+        default: 'v4.3.0-rc.1'
       K9S_CLI_VERSION:
         description: 'K9S_CLI_VERSION'
         required: false
@@ -41,7 +41,7 @@ on:
         description: 'KOPS_CLI_VERSION'
         required: false
         type: string
-        default: 'v1.36.2'
+        default: 'v1.37.0-beta.1'
       KUBECTL_CLI_VERSION:
         description: 'KUBECTL_CLI_VERSION'
         required: false
@@ -56,7 +56,7 @@ on:
         description: 'SWARM_CLI_VERSION'
         required: false
         type: string
-        default: 'v2.0.0-rc2'
+        default: 'v2.0.0-rc4'
       TERRAFORM_CLI_VERSION:
         description: 'TERRAFORM_CLI_VERSION'
         required: false

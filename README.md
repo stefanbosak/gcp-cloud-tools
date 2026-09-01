@@ -16,20 +16,20 @@
 <!-- VERSION_INFO_START -->
 | Component | Version |
 |-----------|---------|
-| **Ansible** | [`v2.21.3`](https://github.com/ansible/ansible/releases/tag/v2.21.3) |
+| **Ansible** | [`v2.21.4rc1`](https://github.com/ansible/ansible/releases/tag/v2.21.4rc1) |
 | **cert-manager CLI** | [`v2.5.0`](https://github.com/cert-manager/cmctl/releases/tag/v2.5.0) |
-| **GCP CLI** | [`582.0.0`](https://cloud.google.com/sdk/docs/release-notes) |
-| **Helm** | [`v4.2.4`](https://github.com/helm/helm/releases/tag/v4.2.4) |
+| **GCP CLI** | [`583.0.0`](https://cloud.google.com/sdk/docs/release-notes) |
+| **Helm** | [`v4.3.0-rc.1`](https://github.com/helm/helm/releases/tag/v4.3.0-rc.1) |
 | **K9s** | [`v0.51.0`](https://github.com/derailed/k9s/releases/tag/v0.51.0) |
-| **Kops** | [`v1.36.2`](https://github.com/kubernetes/kops/releases/tag/v1.36.2) |
+| **Kops** | [`v1.37.0-beta.1`](https://github.com/kubernetes/kops/releases/tag/v1.37.0-beta.1) |
 | **Kubectl** | [`v1.37.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.37.0) |
 | **Kustomize** | [`5.8.1`](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize/v5.8.1) |
-| **SwarmCLI** | [`v2.0.0-rc2`](https://github.com/Eldara-Tech/swarmcli/releases/tag/v2.0.0-rc2) |
+| **SwarmCLI** | [`v2.0.0-rc4`](https://github.com/Eldara-Tech/swarmcli/releases/tag/v2.0.0-rc4) |
 | **Terraform** | [`1.17.0-alpha20260827`](https://github.com/hashicorp/terraform/releases/tag/v1.17.0-alpha20260827) |
 | **Terragrunt** | [`v1.1.4`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.4) |
 | **OpenTofu** | [`1.13.0-beta1`](https://github.com/opentofu/opentofu/releases/tag/v1.13.0-beta1) |
 
-> 🔄 Last updated: 2026-08-27T13:40:47+02:00 · [Build #158](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/33109724249)
+> 🔄 Last updated: 2026-08-27T21:46:30+02:00 · [Build #165](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/33533336426)
 <!-- VERSION_INFO_END -->
 
 ---

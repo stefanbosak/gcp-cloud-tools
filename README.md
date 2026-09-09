@@ -27,9 +27,9 @@
 | **SwarmCLI** | [`v2.0.0`](https://github.com/Eldara-Tech/swarmcli/releases/tag/v2.0.0) |
 | **Terraform** | [`1.16.1`](https://github.com/hashicorp/terraform/releases/tag/v1.16.1) |
 | **Terragrunt** | [`v1.1.4`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.1.4) |
-| **OpenTofu** | [`1.12.6`](https://github.com/opentofu/opentofu/releases/tag/v1.12.6) |
+| **OpenTofu** | [`1.13.0-beta1`](https://github.com/opentofu/opentofu/releases/tag/v1.13.0-beta1) |
 
-> 🔄 Last updated: 2026-09-09T08:41:03+02:00 · [Build #193](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/34339917365)
+> 🔄 Last updated: 2026-09-09T12:27:30+02:00 · [Build #194](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/34351620898)
 <!-- VERSION_INFO_END -->
 
 ---

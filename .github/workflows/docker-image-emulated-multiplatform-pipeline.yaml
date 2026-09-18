@@ -21,7 +21,7 @@ on:
         description: 'CM_CTL_CLI_VERSION'
         required: false
         type: string
-        default: 'v2.5.0'
+        default: 'v2.6.1'
       GCLOUD_CLI_VERSION:
         description: 'GCLOUD_CLI_VERSION'
         required: false

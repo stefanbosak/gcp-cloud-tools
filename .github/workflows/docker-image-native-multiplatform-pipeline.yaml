@@ -28,7 +28,7 @@ on:
         description: 'GCLOUD_CLI_VERSION'
         required: false
         type: string
-        default: '585.0.0'
+        default: '586.0.0'
       HELM_CLI_VERSION:
         description: 'HELM_CLI_VERSION'
         required: false
@@ -63,7 +63,7 @@ on:
         description: 'SOFKA_CLI_VERSION'
         required: false
         type: string
-        default: 'v0.28.4'
+        default: 'v0.28.6'
       SWARM_CLI_VERSION:
         description: 'SWARM_CLI_VERSION'
         required: false
@@ -73,7 +73,7 @@ on:
         description: 'TERRAFORM_CLI_VERSION'
         required: false
         type: string
-        default: '1.16.3'
+        default: '1.17.0-beta2'
       TERRAGRUNT_CLI_VERSION:
         description: 'TERRAGRUNT_CLI_VERSION'
         required: false

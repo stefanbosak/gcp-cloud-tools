@@ -460,7 +460,6 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     apt-get -y --no-install-recommends install \
       google-cloud-cli=${GCLOUD_CLI_VERSION}-0 \
       google-cloud-cli-gke-gcloud-auth-plugin=${GCLOUD_CLI_VERSION}-0 \
-      google-cloud-cli-kpt=${GCLOUD_CLI_VERSION}-0 \
       google-cloud-cli-skaffold=${GCLOUD_CLI_VERSION}-0 \
       google-cloud-cli-kubectl-oidc=${GCLOUD_CLI_VERSION}-0 \
       google-cloud-cli-local-extract=${GCLOUD_CLI_VERSION}-0 \

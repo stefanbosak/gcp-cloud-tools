@@ -28,7 +28,7 @@ on:
         description: 'GCLOUD_CLI_VERSION'
         required: false
         type: string
-        default: '587.0.0'
+        default: '588.0.0'
       HELM_CLI_VERSION:
         description: 'HELM_CLI_VERSION'
         required: false
@@ -63,7 +63,7 @@ on:
         description: 'SOFKA_CLI_VERSION'
         required: false
         type: string
-        default: 'v0.29.9'
+        default: 'v0.30.0'
       SWARM_CLI_VERSION:
         description: 'SWARM_CLI_VERSION'
         required: false

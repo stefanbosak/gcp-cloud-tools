@@ -22,7 +22,7 @@
 | **Helm** | [`v4.3.0`](https://github.com/helm/helm/releases/tag/v4.3.0) |
 | **K9s** | [`v0.51.0`](https://github.com/derailed/k9s/releases/tag/v0.51.0) |
 | **Kops** | [`v1.37.0-beta.1`](https://github.com/kubernetes/kops/releases/tag/v1.37.0-beta.1) |
-| **Kpt** | [`v1.0.2-pre.1`](https://github.com/kptdev/kpt/releases/tag/v1.0.2-pre.1) |
+| **Kpt** | [`v1.0.2-pre.2`](https://github.com/kptdev/kpt/releases/tag/v1.0.2-pre.2) |
 | **Kubectl** | [`v1.38.0-alpha.1`](https://github.com/kubernetes/kubernetes/releases/tag/v1.38.0-alpha.1) |
 | **Kustomize** | [`5.8.2`](https://github.com/kubernetes-sigs/kustomize/releases/tag/kustomize/v5.8.2) |
 | **Sofka** | [`v0.31.0`](https://github.com/nklmilojevic/sofka/releases/tag/v0.31.0) |
@@ -31,7 +31,7 @@
 | **Terragrunt** | [`v1.2.0-rc1`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.2.0-rc1) |
 | **OpenTofu** | [`1.13.1`](https://github.com/opentofu/opentofu/releases/tag/v1.13.1) |
 
-> 🔄 Last updated: 2026-10-06T20:34:33+02:00 · [Build #263](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/37540264780)
+> 🔄 Last updated: 2026-10-07T00:27:27+02:00 · [Build #264](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/37636649207)
 <!-- VERSION_INFO_END -->
 
 ---

@@ -78,7 +78,7 @@ on:
         description: 'TERRAGRUNT_CLI_VERSION'
         required: false
         type: string
-        default: 'v1.2.0-rc2'
+        default: 'v1.2.0-rc3'
       OPENTOFU_CLI_VERSION:
         description: 'OPENTOFU_CLI_VERSION'
         required: false

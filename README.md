@@ -18,7 +18,7 @@
 |-----------|---------|
 | **Ansible** | [`v2.22.0rc1`](https://github.com/ansible/ansible/releases/tag/v2.22.0rc1) |
 | **cert-manager CLI** | [`v2.6.1`](https://github.com/cert-manager/cmctl/releases/tag/v2.6.1) |
-| **GCP CLI** | [`590.0.0`](https://cloud.google.com/sdk/docs/release-notes) |
+| **GCP CLI** | [`590.0.1`](https://cloud.google.com/sdk/docs/release-notes) |
 | **Helm** | [`v4.3.1`](https://github.com/helm/helm/releases/tag/v4.3.1) |
 | **K9s** | [`v0.51.0`](https://github.com/derailed/k9s/releases/tag/v0.51.0) |
 | **Kops** | [`v1.37.0-beta.1`](https://github.com/kubernetes/kops/releases/tag/v1.37.0-beta.1) |
@@ -31,7 +31,7 @@
 | **Terragrunt** | [`v1.2.0`](https://github.com/gruntwork-io/terragrunt/releases/tag/v1.2.0) |
 | **OpenTofu** | [`1.13.2`](https://github.com/opentofu/opentofu/releases/tag/v1.13.2) |
 
-> 🔄 Last updated: 2026-10-21T20:31:27+02:00 · [Build #296](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/39831349044)
+> 🔄 Last updated: 2026-10-22T20:30:25+02:00 · [Build #297](https://github.com/stefanbosak/gcp-cloud-tools/actions/runs/40003376772)
 <!-- VERSION_INFO_END -->
 
 ---
